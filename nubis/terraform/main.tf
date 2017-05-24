@@ -170,33 +170,33 @@ module "sso-image" {
 #  ]
 #}
 #
-#resource "aws_iam_role" "prometheus" {
-#  count = "${var.enabled * length(split(",", var.environments))}"
-#
-#  lifecycle {
-#    create_before_destroy = true
-#  }
-#
-#  name = "${var.project}-${element(split(",",var.environments), count.index)}-${var.aws_region}"
-#  path = "/nubis/${var.project}/"
-#
-#  assume_role_policy = <<POLICY
-#{
-#  "Version": "2012-10-17",
-#  "Statement": [
-#    {
-#      "Action": "sts:AssumeRole",
-#      "Principal": {
-#        "Service": "ec2.amazonaws.com"
-#      },
-#      "Effect": "Allow",
-#      "Sid": ""
-#    }
-#  ]
-#}
-#POLICY
-#}
-#
+resource "aws_iam_role" "sso" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  name = "${var.project}-${element(split(",",var.environments), count.index)}-${var.aws_region}"
+  path = "/nubis/${var.project}/"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+POLICY
+}
+
 #resource "aws_iam_role_policy" "prometheus" {
 #  count = "${var.enabled * length(split(",", var.environments))}"
 #
