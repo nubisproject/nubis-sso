@@ -174,6 +174,8 @@ resource "aws_launch_configuration" "sso" {
   iam_instance_profile = "${element(aws_iam_instance_profile.sso.*.name, count.index)}"
 
   enable_monitoring    = false
+  
+  associate_public_ip_address = true
 
   root_block_device = {
 #    volume_size = "8"
@@ -200,61 +202,60 @@ NUBIS_USER_GROUPS="${var.nubis_user_groups}"
 EOF
 }
 
-#resource "aws_autoscaling_group" "sso" {
-#  count = "${var.enabled * length(split(",", var.environments))}"
-#
-#  #XXX: Fugly, assumes 3 subnets per environments, bad assumption, but valid ATM
-#  vpc_zone_identifier = [
-#    "${element(split(",",var.subnet_ids), (count.index * 3) + 0 )}",
-#    "${element(split(",",var.subnet_ids), (count.index * 3) + 1 )}",
-#    "${element(split(",",var.subnet_ids), (count.index * 3) + 2 )}",
-#  ]
-#
-#  name                      = "${var.project}-${element(split(",",var.environments), count.index)} (LC ${element(aws_launch_configuration.prometheus.*.name, count.index)})"
-#  max_size                  = "2"
-#  min_size                  = "1"
-#  health_check_grace_period = 300
-#  health_check_type         = "ELB"
-#  desired_capacity          = "1"
-#  force_delete              = true
-#  launch_configuration      = "${element(aws_launch_configuration.prometheus.*.name, count.index)}"
-#
-#  wait_for_capacity_timeout = "60m"
-#
-#  load_balancers = [
-#    "${element(aws_elb.traefik.*.name, count.index)}",
-#  ]
-#
-#  enabled_metrics = [
-#    "GroupMinSize",
-#    "GroupMaxSize",
-#    "GroupDesiredCapacity",
-#    "GroupInServiceInstances",
-#    "GroupPendingInstances",
-#    "GroupStandbyInstances",
-#    "GroupTerminatingInstances",
-#    "GroupTotalInstances",
-#  ]
-#
-#  tag {
-#    key                 = "Name"
-#    value               = "Prometheus (${var.nubis_version}) for ${var.service_name} in ${element(split(",",var.environments), count.index)}"
-#    propagate_at_launch = true
-#  }
-#
-#  tag {
-#    key                 = "ServiceName"
-#    value               = "${var.project}"
-#    propagate_at_launch = true
-#  }
-#
-#  tag {
-#    key                 = "Environment"
-#    value               = "${element(split(",",var.environments), count.index)}"
-#    propagate_at_launch = true
-#  }
-#}
-#
+resource "aws_autoscaling_group" "sso" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  #XXX: Fugly, assumes 3 subnets per environments, bad assumption, but valid ATM
+  vpc_zone_identifier = [
+    "${element(split(",",var.public_subnet_ids), (count.index * 3) + 0 )}",
+    "${element(split(",",var.public_subnet_ids), (count.index * 3) + 1 )}",
+    "${element(split(",",var.public_subnet_ids), (count.index * 3) + 2 )}",
+  ]
+
+  name                      = "${var.project}-${element(split(",",var.environments), count.index)} (LC {element(aws_launch_configuration.prometheus.*.name, count.index)})"
+  max_size                  = "2"
+  min_size                  = "1"
+  health_check_grace_period = 300
+  health_check_type         = "EC2"
+  desired_capacity          = "1"
+  force_delete              = true
+  launch_configuration      = "${element(aws_launch_configuration.prometheus.*.name, count.index)}"
+
+  wait_for_capacity_timeout = "60m"
+
+  load_balancers = [
+    "${element(aws_elb.sso.*.name, count.index)}",
+  ]
+
+  enabled_metrics = [
+    "GroupMinSize",
+    "GroupMaxSize",
+    "GroupDesiredCapacity",
+    "GroupInServiceInstances",
+    "GroupPendingInstances",
+    "GroupStandbyInstances",
+    "GroupTerminatingInstances",
+    "GroupTotalInstances",
+  ]
+
+  tag {
+    key                 = "Name"
+    value               = "SSO (${var.nubis_version}) for ${var.service_name} in ${element(split(",",var.environments), count.index)}"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "ServiceName"
+    value               = "${var.project}"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Environment"
+    value               = "${element(split(",",var.environments), count.index)}"
+    propagate_at_launch = true
+  }
+}
 
 resource "aws_security_group" "sso-elb" {
   count = "${var.enabled * length(split(",", var.environments))}"
