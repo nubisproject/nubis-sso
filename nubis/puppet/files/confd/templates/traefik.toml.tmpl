@@ -1,0 +1,45 @@
+defaultEntryPoints = ["http","https"]
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+    compress = true
+    [entryPoints.http.redirect]
+      entryPoint = "https"
+  [entryPoints.https]
+    address = ":443"
+    compress = true
+    [entryPoints.https.tls]
+
+[web]
+address = ":8082"
+
+[consul]
+endpoint = "127.0.0.1:8500"
+watch = true
+prefix = "sso/traefik/stage/config"
+
+[acme]
+# Handle when this isn't set
+email="nubis-team@mozilla.com"
+storage = "sso/traefik/stage/acme"
+entryPoint = "https"
+
+# Disable for prod
+caServer = "https://acme-staging.api.letsencrypt.org/directory"
+
+onDemand = false
+[[acme.domains]]
+   main = "sso.stage.us-west-2.nubis-gozer.nubis.allizom.org"
+
+[file]
+[backends]
+  [backends.apache]
+    [backends.apache.servers.server1]
+    url = "http://127.0.0.1:82"
+
+[frontends]
+  [frontends.apache]
+  passHostHeader = true
+  backend="apache"
+    [frontends.apache.routes.main]
+    rule="PathPrefix:/"
