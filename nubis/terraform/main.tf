@@ -41,8 +41,7 @@ resource "aws_security_group" "sso" {
 
     security_groups = [
       "${element(split(",",var.ssh_security_groups), count.index)}",
-#      "${element(aws_security_group.elb-traefik.*.id, count.index)}",
-#      "${element(split(",",var.sso_security_groups), count.index)}",
+      "${element(aws_security_group.sso-elb.*.id, count.index)}",
     ]
   }
 
@@ -54,8 +53,7 @@ resource "aws_security_group" "sso" {
 
     security_groups = [
       "${element(split(",",var.ssh_security_groups), count.index)}",
-#      "${element(aws_security_group.elb-traefik.*.id, count.index)}",
-#      "${element(split(",",var.sso_security_groups), count.index)}",
+      "${element(aws_security_group.sso-elb.*.id, count.index)}",
     ]
   }
 
@@ -84,7 +82,7 @@ resource "aws_iam_instance_profile" "sso" {
   name = "${var.project}-${element(split(",",var.environments), count.index)}-${var.aws_region}"
 
   roles = [
-    "${element(aws_iam_role.prometheus.*.name, count.index)}",
+    "${element(aws_iam_role.sso.*.name, count.index)}",
   ]
 }
 
@@ -263,7 +261,8 @@ POLICY
 #  }
 #}
 #
-resource "aws_security_group" "elb-traefik" {
+
+resource "aws_security_group" "sso-elb" {
   count = "${var.enabled * length(split(",", var.environments))}"
 
   lifecycle {
@@ -298,83 +297,71 @@ resource "aws_security_group" "elb-traefik" {
   }
 }
 
-#resource "aws_elb" "traefik" {
-#  count = "${var.enabled * length(split(",", var.environments))}"
-#
-#  #XXX
-#  lifecycle {
-#    create_before_destroy = true
-#  }
-#
-#  name = "sso-${element(split(",",var.environments), count.index)}"
-#
-#  #XXX: Fugly, assumes 3 subnets per environments, bad assumption, but valid ATM
-#  subnets = [
-#    "${element(split(",",var.public_subnet_ids), (count.index * 3) + 0 )}",
-#    "${element(split(",",var.public_subnet_ids), (count.index * 3) + 1 )}",
-#    "${element(split(",",var.public_subnet_ids), (count.index * 3) + 2 )}",
-#  ]
-#
-#  # This is an internet facing ELB
-#  internal = false
-#
-#  listener {
-#    instance_port     = 80
-#    instance_protocol = "tcp"
-#    lb_port           = 80
-#    lb_protocol       = "tcp"
-#  }
-#
-#  listener {
-#    instance_port     = 443
-#    instance_protocol = "tcp"
-#    lb_port           = 443
-#    lb_protocol       = "tcp"
-#  }
-#
-#  health_check {
-#    healthy_threshold   = 2
-#    unhealthy_threshold = 2
-#    timeout             = 3
-#    target              = "TCP:80"
-#    interval            = 30
-#  }
-#
-#  cross_zone_load_balancing = true
-#
-#  security_groups = [
-#    "${element(aws_security_group.elb-traefik.*.id, count.index)}",
-#  ]
-#
-#  tags = {
-#    Name        = "traefik-${element(split(",",var.environments), count.index)}"
-#    Region      = "${var.aws_region}"
-#    Environment = "${element(split(",",var.environments), count.index)}"
-#  }
-#}
-#
-#resource "aws_route53_record" "traefik-wildcard" {
-#  count   = "${var.enabled * length(split(",", var.environments))}"
-#  zone_id = "${var.zone_id}"
-#  name    = "*.mon.${element(split(",",var.environments), count.index)}"
-#  type    = "CNAME"
-#  ttl     = "30"
-#
-#  records = [
-#    "mon.${element(split(",",var.environments), count.index)}.${var.aws_region}.${var.service_name}.${var.nubis_domain}",
-#  ]
-#}
-#
-#resource "aws_route53_record" "traefik" {
-#  count   = "${var.enabled * length(split(",", var.environments))}"
-#  zone_id = "${var.zone_id}"
-#
-#  name = "mon.${element(split(",",var.environments), count.index)}"
-#  type = "A"
-#
-#  alias {
-#    name                   = "${element(aws_elb.traefik.*.dns_name,count.index)}"
-#    zone_id                = "${element(aws_elb.traefik.*.zone_id,count.index)}"
-#    evaluate_target_health = true
-#  }
-#}
+resource "aws_elb" "sso" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  #XXX
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  name = "sso-${element(split(",",var.environments), count.index)}"
+
+  #XXX: Fugly, assumes 3 subnets per environments, bad assumption, but valid ATM
+  subnets = [
+    "${element(split(",",var.public_subnet_ids), (count.index * 3) + 0 )}",
+    "${element(split(",",var.public_subnet_ids), (count.index * 3) + 1 )}",
+    "${element(split(",",var.public_subnet_ids), (count.index * 3) + 2 )}",
+  ]
+
+  # This is an internet facing ELB
+  internal = false
+
+  listener {
+    instance_port     = 80
+    instance_protocol = "tcp"
+    lb_port           = 80
+    lb_protocol       = "tcp"
+  }
+
+  listener {
+    instance_port     = 443
+    instance_protocol = "tcp"
+    lb_port           = 443
+    lb_protocol       = "tcp"
+  }
+
+  health_check {
+    healthy_threshold   = 3
+    unhealthy_threshold = 3
+    timeout             = 5
+    target              = "TCP:80"
+    interval            = 30
+  }
+
+  cross_zone_load_balancing = true
+
+  security_groups = [
+    "${element(aws_security_group.sso-elb.*.id, count.index)}",
+  ]
+
+  tags = {
+    Name        = "sso-${element(split(",",var.environments), count.index)}"
+    Region      = "${var.aws_region}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  }
+}
+
+resource "aws_route53_record" "sso" {
+  count   = "${var.enabled * length(split(",", var.environments))}"
+  zone_id = "${var.zone_id}"
+
+  name = "dsh.${element(split(",",var.environments), count.index)}"
+  type = "A"
+
+  alias {
+    name                   = "${element(aws_elb.sso.*.dns_name,count.index)}"
+    zone_id                = "${element(aws_elb.sso.*.zone_id,count.index)}"
+    evaluate_target_health = true
+  }
+}
