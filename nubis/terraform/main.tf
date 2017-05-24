@@ -113,100 +113,94 @@ resource "aws_iam_role" "sso" {
 POLICY
 }
 
-#resource "aws_iam_role_policy" "sso" {
-#  count = "${var.enabled * length(split(",", var.environments))}"
-#
-#  lifecycle {
-#    create_before_destroy = true
-#  }
-#
-#  name = "${var.project}-bucket-${element(split(",",var.environments), count.index)}-${var.aws_region}"
-#  role = "${element(aws_iam_role.prometheus.*.id, count.index)}"
-#
-#  policy = <<POLICY
-#{
-#  "Version": "2012-10-17",
-#  "Statement": [
-#              {
-#              "Sid": "SeeAllBuckets",
-#              "Effect": "Allow",
-#              "Action": "s3:ListAllMyBuckets",
-#              "Resource": "arn:aws:s3:::*"
-#            },
-#            {
-#              "Sid": "ListInOurBuckets",
-#              "Effect": "Allow",
-#              "Action": [
-#                "s3:ListBucket"
-#              ],
-#              "Resource": [
-#	          "${element(aws_s3_bucket.prometheus.*.arn, count.index)}"
-#	       ]
-#            },
-#            {
-#              "Sid": "FullAccessToOurBucket",
-#              "Effect": "Allow",
-#              "Action": [
-#                "s3:PutObject",
-#                "s3:GetObject",
-#                "s3:DeleteObject"
-#              ],
-#              "Resource": "${element(aws_s3_bucket.prometheus.*.arn, count.index)}/*"
-#            }
-#  ]
-#}
-#POLICY
-#}
-#
-#resource "aws_launch_configuration" "prometheus" {
-#  count = "${var.enabled * length(split(",", var.environments))}"
-#
-#  name_prefix = "${var.project}-${element(split(",",var.environments), count.index)}-${var.aws_region}-"
-#  
-#  image_id = "${data.atlas_artifact.nubis-prometheus.metadata_full["region-${var.aws_region}"]}"
-#
-#  instance_type        = "t2.small"
-#  key_name             = "${var.key_name}"
-#  iam_instance_profile = "${element(aws_iam_instance_profile.prometheus.*.name, count.index)}"
-#
-#  enable_monitoring    = false
-#
-#  root_block_device = {
-#    volume_size = "32"
-#    volume_type = "gp2"
-#    delete_on_termination = true
-#  }
-#
-#  security_groups = [
-#    "${element(aws_security_group.prometheus.*.id, count.index)}",
-#    "${element(split(",",var.internet_access_security_groups), count.index)}",
-#    "${element(split(",",var.shared_services_security_groups), count.index)}",
-#    "${element(split(",",var.ssh_security_groups), count.index)}",
-#    "${element(split(",",var.monitoring_security_groups), count.index)}",
-#  ]
-#
-#  user_data = <<EOF
-#NUBIS_PROJECT="${var.project}"
-#NUBIS_ENVIRONMENT="${element(split(",",var.environments), count.index)}"
-#NUBIS_ACCOUNT="${var.service_name}"
-#NUBIS_TECHNICAL_CONTACT="${var.technical_contact}"
-#NUBIS_DOMAIN="${var.nubis_domain}"
-#NUBIS_PROMETHEUS_LIVE_APP="${var.live_app}"
-#NUBIS_PROMETHEUS_BUCKET="${element(aws_s3_bucket.prometheus.*.id, count.index)}"
-#NUBIS_PROMETHEUS_SLACK_URL="${var.slack_url}"
-#NUBIS_PROMETHEUS_SLACK_CHANNEL="${var.slack_channel}"
-#NUBIS_PROMETHEUS_NOTIFICATION_EMAIL="${var.notification_email}"
-#NUBIS_PROMETHEUS_PAGERDUTY_SERVICE_KEY="${var.pagerduty_service_key}"
-#NUBIS_PROMETHEUS_SINK_SLACK_URL="${var.sink_slack_url}"
-#NUBIS_PROMETHEUS_SINK_SLACK_CHANNEL="${var.sink_slack_channel}"
-#NUBIS_PROMETHEUS_SINK_NOTIFICATION_EMAIL="${var.sink_notification_email}"
-#NUBIS_PROMETHEUS_SINK_PAGERDUTY_SERVICE_KEY="${var.sink_pagerduty_service_key}"
-#NUBIS_SUDO_GROUPS="${var.nubis_sudo_groups}"
-#NUBIS_USER_GROUPS="${var.nubis_user_groups}"
-#EOF
-#}
-#
-#resource "aws_autoscaling_group" "prometheus" {
+resource "aws_iam_role_policy" "sso" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  name = "${var.project}-route53-${element(split(",",var.environments), count.index)}-${var.aws_region}"
+  role = "${element(aws_iam_role.sso.*.id, count.index)}"
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+        {
+            "Action": [
+                "route53:ChangeResourceRecordSets"
+            ],
+            "Resource": "arn:aws:route53:::hostedzone/${var.zone_id}",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "route53:GetChange"
+            ],
+            "Resource": "arn:aws:route53:::change/*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "route53:ListHostedZonesByName"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "autoscaling:DescribeAutoScalingGroups",
+                "ec2:DescribeInstances",
+                "ec2:DescribeTags"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        }
+    ]
+}
+POLICY
+}
+
+resource "aws_launch_configuration" "sso" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  name_prefix = "${var.project}-${element(split(",",var.environments), count.index)}-${var.aws_region}-"
+  
+  image_id = "${module.sso-image.image_id}"
+
+  instance_type        = "t2.small"
+  key_name             = "${var.key_name}"
+  iam_instance_profile = "${element(aws_iam_instance_profile.sso.*.name, count.index)}"
+
+  enable_monitoring    = false
+
+  root_block_device = {
+#    volume_size = "8"
+    volume_type = "gp2"
+    delete_on_termination = true
+  }
+
+  security_groups = [
+    "${element(aws_security_group.sso.*.id, count.index)}",
+    "${element(split(",",var.sso_security_groups), count.index)}",
+    "${element(split(",",var.internet_access_security_groups), count.index)}",
+    "${element(split(",",var.shared_services_security_groups), count.index)}",
+    "${element(split(",",var.ssh_security_groups), count.index)}",
+  ]
+
+  user_data = <<EOF
+NUBIS_PROJECT="${var.project}"
+NUBIS_ENVIRONMENT="${element(split(",",var.environments), count.index)}"
+NUBIS_ACCOUNT="${var.service_name}"
+NUBIS_TECHNICAL_CONTACT="${var.technical_contact}"
+NUBIS_DOMAIN="${var.nubis_domain}"
+NUBIS_SUDO_GROUPS="${var.nubis_sudo_groups}"
+NUBIS_USER_GROUPS="${var.nubis_user_groups}"
+EOF
+}
+
+#resource "aws_autoscaling_group" "sso" {
 #  count = "${var.enabled * length(split(",", var.environments))}"
 #
 #  #XXX: Fugly, assumes 3 subnets per environments, bad assumption, but valid ATM
@@ -356,7 +350,7 @@ resource "aws_route53_record" "sso" {
   count   = "${var.enabled * length(split(",", var.environments))}"
   zone_id = "${var.zone_id}"
 
-  name = "dsh.${element(split(",",var.environments), count.index)}"
+  name = "n3s.${element(split(",",var.environments), count.index)}"
   type = "A"
 
   alias {
