@@ -178,7 +178,6 @@ resource "aws_launch_configuration" "sso" {
   associate_public_ip_address = true
 
   root_block_device = {
-#    volume_size = "8"
     volume_type = "gp2"
     delete_on_termination = true
   }
@@ -223,10 +222,6 @@ resource "aws_autoscaling_group" "sso" {
 
   wait_for_capacity_timeout = "60m"
 
-  load_balancers = [
-    "${element(aws_elb.sso.*.name, count.index)}",
-  ]
-
   enabled_metrics = [
     "GroupMinSize",
     "GroupMaxSize",
@@ -254,109 +249,5 @@ resource "aws_autoscaling_group" "sso" {
     key                 = "Environment"
     value               = "${element(split(",",var.environments), count.index)}"
     propagate_at_launch = true
-  }
-}
-
-resource "aws_security_group" "sso-elb" {
-  count = "${var.enabled * length(split(",", var.environments))}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  name        = "sso-elb-${element(split(",",var.environments), count.index)}"
-  description = "Allow inbound traffic for SSO"
-
-  vpc_id      = "${element(split(",",var.vpc_ids), count.index)}"
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Put back Amazon Default egress all rule
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_elb" "sso" {
-  count = "${var.enabled * length(split(",", var.environments))}"
-
-  #XXX
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  name = "sso-${element(split(",",var.environments), count.index)}"
-
-  #XXX: Fugly, assumes 3 subnets per environments, bad assumption, but valid ATM
-  subnets = [
-    "${element(split(",",var.public_subnet_ids), (count.index * 3) + 0 )}",
-    "${element(split(",",var.public_subnet_ids), (count.index * 3) + 1 )}",
-    "${element(split(",",var.public_subnet_ids), (count.index * 3) + 2 )}",
-  ]
-
-  # This is an internet facing ELB
-  internal = false
-
-  listener {
-    instance_port     = 80
-    instance_protocol = "tcp"
-    lb_port           = 80
-    lb_protocol       = "tcp"
-  }
-
-  listener {
-    instance_port     = 443
-    instance_protocol = "tcp"
-    lb_port           = 443
-    lb_protocol       = "tcp"
-  }
-
-  health_check {
-    healthy_threshold   = 3
-    unhealthy_threshold = 3
-    timeout             = 5
-    target              = "TCP:80"
-    interval            = 30
-  }
-
-  cross_zone_load_balancing = true
-
-  security_groups = [
-    "${element(aws_security_group.sso-elb.*.id, count.index)}",
-  ]
-
-  tags = {
-    Name        = "sso-${element(split(",",var.environments), count.index)}"
-    Region      = "${var.aws_region}"
-    Environment = "${element(split(",",var.environments), count.index)}"
-  }
-}
-
-resource "aws_route53_record" "sso" {
-  count   = "${var.enabled * length(split(",", var.environments))}"
-  zone_id = "${var.zone_id}"
-
-  name = "n3s.${element(split(",",var.environments), count.index)}"
-  type = "A"
-
-  alias {
-    name                   = "${element(aws_elb.sso.*.dns_name,count.index)}"
-    zone_id                = "${element(aws_elb.sso.*.zone_id,count.index)}"
-    evaluate_target_health = true
   }
 }
