@@ -211,14 +211,14 @@ resource "aws_autoscaling_group" "sso" {
     "${element(split(",",var.public_subnet_ids), (count.index * 3) + 2 )}",
   ]
 
-  name                      = "${var.project}-${element(split(",",var.environments), count.index)} (LC {element(aws_launch_configuration.prometheus.*.name, count.index)})"
+  name                      = "${var.project}-${element(split(",",var.environments), count.index)} (LC {element(aws_launch_configuration.sso.*.name, count.index)})"
   max_size                  = "2"
   min_size                  = "1"
   health_check_grace_period = 300
   health_check_type         = "EC2"
   desired_capacity          = "1"
   force_delete              = true
-  launch_configuration      = "${element(aws_launch_configuration.prometheus.*.name, count.index)}"
+  launch_configuration      = "${element(aws_launch_configuration.sso.*.name, count.index)}"
 
   wait_for_capacity_timeout = "60m"
 
