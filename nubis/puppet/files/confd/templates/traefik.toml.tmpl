@@ -7,7 +7,7 @@ defaultEntryPoints = ["http","https"]
       entryPoint = "https"
   [entryPoints.https]
     address = ":443"
-    compress = true
+    compress = false
     [entryPoints.https.tls]
 
 [web]
@@ -16,20 +16,20 @@ address = ":8082"
 [consul]
 endpoint = "127.0.0.1:8500"
 watch = true
-prefix = "sso/traefik/stage/config"
+prefix = "{{ getv "/config/Project" }}/{{ getv "/config/Environment" }}/traefik/config"
 
 [acme]
 # Handle when this isn't set
 email="nubis-team@mozilla.com"
-storage = "sso/traefik/stage/acme"
+storage = "{{ getv "/config/Project" }}/{{ getv "/config/Environment" }}/traefik/acme"
 entryPoint = "https"
 
 # Disable for prod
-caServer = "https://acme-staging.api.letsencrypt.org/directory"
+#caServer = "https://acme-staging.api.letsencrypt.org/directory"
 
 onDemand = false
 [[acme.domains]]
-   main = "sso.stage.us-west-2.nubis-gozer.nubis.allizom.org"
+   main = "{{ getv "/config/Domain" }}"
 
 [file]
 [backends]

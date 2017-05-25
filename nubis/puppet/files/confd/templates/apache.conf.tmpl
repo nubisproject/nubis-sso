@@ -1,5 +1,22 @@
+# Secrets
+OIDCClientID "{{ getv "/config/OpenID/Client/ID" }}"
+OIDCClientSecret "{{ getv "/config/OpenID/Client/Secret" }}"
+
+# Needs to be generated
+OIDCCryptoPassphrase FDFSDFSD
+
+# Landing redirect
+OIDCRedirectURI "https://{{ getv "/config/Domain" }}/sso"
+
 # Proxy
 OIDCOutgoingProxy proxy.service.consul:3128
+
+# Provider info
+OIDCProviderIssuer https://auth.mozilla.auth0.com
+OIDCProviderAuthorizationEndpoint https://auth.mozilla.auth0.com/authorize
+OIDCProviderTokenEndpoint https://auth.mozilla.auth0.com/oauth/token
+OIDCProviderUserInfoEndpoint https://auth.mozilla.auth0.com/userinfo
+OIDCProviderJwksUri https://auth.mozilla.auth0.com/.well-known/jwks.json
 
 # Session Cache
 OIDCCacheType memcache

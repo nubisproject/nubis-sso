@@ -1,0 +1,35 @@
+#!/bin/bash
+
+NUBIS_ENVIRONMENT=$(nubis-metadata NUBIS_ENVIRONMENT)
+NUBIS_PROJECT=$(nubis-metadata NUBIS_PROJECT)
+NUBIS_ACCOUNT=$(nubis-metadata NUBIS_ACCOUNT)
+NUBIS_DOMAIN=$(nubis-metadata NUBIS_DOMAIN)
+NUBIS_SSO_ZONEID=$(nubis-metadata NUBIS_SSO_ZONEID)
+NUBIS_REGION=$(nubis-region)
+
+KV_PREFIX="$NUBIS_PROJECT/$NUBIS_ENVIRONMENT/config"
+
+echo "Setting KV previx to $KV_PREFIX"
+
+consulate kv set "$KV_PREFIX/Project" "$NUBIS_PROJECT"
+consulate kv set "$KV_PREFIX/Environment" "$NUBIS_ENVIRONMENT"
+
+OPENID_CLIENT_ID=$(nubis-secret get openid/client_id 2>/dev/null)
+if [ ! -z "$OPENID_CLIENT_ID" ]; then
+  consulate kv set "$KV_PREFIX/OpenID/Client/ID" "$OPENID_CLIENT_ID"
+else
+  consulate kv rm "$KV_PREFIX/OpenID/Client/ID"
+fi
+
+OPENID_CLIENT_SECRET=$(nubis-secret get openid/client_secret 2>/dev/null)
+if [ ! -z "$OPENID_CLIENT_SECRET" ]; then
+  consulate kv set "$KV_PREFIX/OpenID/Client/Secret" "$OPENID_CLIENT_SECRET"
+else
+  consulate kv rm "$KV_PREFIX/OpenID/Client/Secret"
+fi
+
+DNS_ENDPOINT="$NUBIS_PROJECT.$NUBIS_ENVIRONMENT.$NUBIS_REGION.$NUBIS_ACCOUNT.$NUBIS_DOMAIN"
+consulate kv set "$KV_PREFIX/Domain" "$DNS_ENDPOINT"
+
+echo "Registering ourselves in DNS for $DNS_ENDPOINT"
+/usr/local/bin/asg-route53 -public=true -type A -zoneid "$NUBIS_SSO_ZONEID" "$DNS_ENDPOINT"
