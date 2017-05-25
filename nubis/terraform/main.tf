@@ -272,6 +272,6 @@ resource "null_resource" "secrets" {
   }
 
   provisioner "local-exec" {
-    command = "${self.triggers.unicreds}/openid/client_secret  ${self.triggers.context}"
+    command = "${self.triggers.unicreds}/openid/client_secret ${var.openid_client_secret} ${self.triggers.context}"
   }
 }
