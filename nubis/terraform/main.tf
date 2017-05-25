@@ -192,6 +192,7 @@ NUBIS_TECHNICAL_CONTACT="${var.technical_contact}"
 NUBIS_DOMAIN="${var.nubis_domain}"
 NUBIS_SUDO_GROUPS="${var.nubis_sudo_groups}"
 NUBIS_USER_GROUPS="${var.nubis_user_groups}"
+NUBIS_SSO_ZONEID="${var.zone_id}"
 EOF
 }
 
@@ -205,7 +206,7 @@ resource "aws_autoscaling_group" "sso" {
     "${element(split(",",var.public_subnet_ids), (count.index * 3) + 2 )}",
   ]
 
-  name                      = "${var.project}-${element(split(",",var.environments), count.index)} (LC {element(aws_launch_configuration.sso.*.name, count.index)})"
+  name                      = "${var.project}-${element(split(",",var.environments), count.index)} (LC ${element(aws_launch_configuration.sso.*.name, count.index)})"
   max_size                  = "2"
   min_size                  = "1"
   health_check_grace_period = 300
@@ -243,5 +244,34 @@ resource "aws_autoscaling_group" "sso" {
     key                 = "Environment"
     value               = "${element(split(",",var.environments), count.index)}"
     propagate_at_launch = true
+  }
+}
+
+# This null resource is responsible for storing our secrets into KMS
+resource "null_resource" "secrets" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  # Important to list here every variable that affects what needs to be put into KMS
+  triggers {
+    credstash_key = "${var.credstash_key}"
+    client_id     = "${var.openid_client_id}"
+    client_secret = "${var.openid_client_secret}"
+    region        = "${var.aws_region}"
+    version       = "${var.nubis_version}"
+    context       = "-E region:${var.aws_region} -E environment:${element(split(",",var.environments), count.index)} -E service:${var.project}"
+    unicreds      = "unicreds -r ${var.aws_region} put -k ${var.credstash_key} ${var.project}/${element(split(",",var.environments), count.index)}"
+    unicreds_file = "unicreds -r ${var.aws_region} put-file -k ${var.credstash_key} ${var.project}/${element(split(",",var.environments), count.index)}"
+  }
+
+  provisioner "local-exec" {
+    command = "${self.triggers.unicreds}/openid/client_id ${var.openid_client_id} ${self.triggers.context}"
+  }
+
+  provisioner "local-exec" {
+    command = "${self.triggers.unicreds}/openid/client_secret  ${self.triggers.context}"
   }
 }

@@ -51,3 +51,11 @@ variable "credstash_key" {
 }
 
 variable "credstash_dynamodb_table" {}
+
+variable "openid_client_id" {
+  default ="OPENID_CLIENT_ID_DEFAULT"
+}
+
+variable "openid_client_secret" {
+  default = "OPENID_CLIENT_SECRET_DEFAULT"
+}
