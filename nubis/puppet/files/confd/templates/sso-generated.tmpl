@@ -1,1 +1,1 @@
-OPENID_SERVER_PASSPHRASE="{{ getv "/config/OpenID/Server/Passphrase" "" }}"
+OPENID_SERVER_PASSPHRASE="{{ if exists "/config/OpenID/Server/Passphrase" }}{{ getv "/config/OpenID/Server/Passphrase" }}{{end}}"

@@ -12,5 +12,5 @@ file { '/usr/local/bin/nubis-sso-generated':
   mode    => '0755',
   owner   => 'root',
   group   => 'root',
-  source  => 'puppet:///nubis/files/confd',
+  source  => 'puppet:///nubis/files/generated',
 }
