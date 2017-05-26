@@ -1,7 +1,7 @@
 [template]
 src = "apache.conf.tmpl"
 dest = "/etc/apache2/conf.d/openidc.conf"
-prefix = "/%%PROJECT%%/%%ENVIRONMENT%%/apache"
+prefix = "/%%PROJECT%%/%%ENVIRONMENT%%"
 
 uid = 0
 gid = 0

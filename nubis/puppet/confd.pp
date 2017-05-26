@@ -6,3 +6,11 @@ file { '/etc/confd':
   group   => 'root',
   source  => 'puppet:///nubis/files/confd',
 }
+
+file { '/usr/local/bin/nubis-sso-generated':
+  ensure  => 'present',
+  mode    => '0755',
+  owner   => 'root',
+  group   => 'root',
+  source  => 'puppet:///nubis/files/confd',
+}

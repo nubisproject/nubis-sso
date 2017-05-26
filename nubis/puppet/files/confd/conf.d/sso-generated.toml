@@ -1,0 +1,15 @@
+[template]
+src = "sso-generated.tmpl"
+dest = "/etc/nubis-config/nubis-sso-generated.sh"
+prefix = "/%%PROJECT%%/%%ENVIRONMENT%%"
+
+uid = 0
+gid = 0
+mode = "0640"
+
+keys = [
+    "/config/*",
+    "/config"
+]
+
+reload_cmd = "/usr/local/bin/nubis-sso-generated"
