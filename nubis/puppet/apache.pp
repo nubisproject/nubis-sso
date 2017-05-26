@@ -38,6 +38,7 @@ apache::vhost { $project_name:
       { 'path' => '/',
         'provider' => 'location',
 	'require' => 'unmanaged',
+	'expires_active' => false,
       },
       {
         'path' => '/prometheus',
