@@ -41,6 +41,22 @@ apache::vhost { $project_name:
 	'expires_active' => false,
       },
       {
+        'path' => '/consul',
+        'provider' => 'location',
+        'auth_type' => 'openid-connect',
+         require => {
+          enforce  => 'all',
+          requires => [
+            'claim multifactor:duo',
+            'claim groups:nubis_global_admins',
+          ],
+	},
+	'custom_fragment' => '
+    ProxyPass http://consul.service.consul:8500/ui/
+    ProxyPassReverse http://consul.service.consul:8500/ui/
+',
+      },
+      {
         'path' => '/elasticsearch',
         'provider' => 'location',
         'auth_type' => 'openid-connect',
@@ -52,8 +68,8 @@ apache::vhost { $project_name:
           ],
 	},
 	'custom_fragment' => '
-    ProxyPass http://es.service.consul:8080/
-    ProxyPassReverse http://es.service.consul:8080/
+    ProxyPass http://es.service.consul:8080
+    ProxyPassReverse http://es.service.consul:8080
 ',
       },
       {
