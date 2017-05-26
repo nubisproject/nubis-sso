@@ -41,6 +41,22 @@ apache::vhost { $project_name:
 	'expires_active' => false,
       },
       {
+        'path' => '/elasticsearch',
+        'provider' => 'location',
+        'auth_type' => 'openid-connect',
+         require => {
+          enforce  => 'all',
+          requires => [
+            'claim multifactor:duo',
+            'claim groups:nubis_global_admins',
+          ],
+	},
+	'custom_fragment' => '
+    ProxyPass http://es.service.consul:8080/
+    ProxyPassReverse http://es.service.consul:8080/
+',
+      },
+      {
         'path' => '/prometheus',
         'provider' => 'location',
         'auth_type' => 'openid-connect',
