@@ -193,6 +193,7 @@ NUBIS_DOMAIN="${var.nubis_domain}"
 NUBIS_SUDO_GROUPS="${var.nubis_sudo_groups}"
 NUBIS_USER_GROUPS="${var.nubis_user_groups}"
 NUBIS_SSO_ZONEID="${var.zone_id}"
+NUBIS_SSO_OPENID_DOMAIN=${var.openid_domain}"
 EOF
 }
 

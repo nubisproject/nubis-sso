@@ -59,3 +59,7 @@ variable "openid_client_id" {
 variable "openid_client_secret" {
   default = "OPENID_CLIENT_SECRET_DEFAULT"
 }
+
+variable "openid_domain" {
+  default = "mozilla"
+}
