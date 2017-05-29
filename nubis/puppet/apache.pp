@@ -38,7 +38,7 @@ apache::vhost { $project_name:
       { 'path' => '/',
         'provider' => 'location',
 	'require' => 'unmanaged',
-	'expires_active' => false,
+	'custom_fragment' => 'ExpiresActive Off',
       },
       {
         'path' => '/consul',
@@ -70,6 +70,22 @@ apache::vhost { $project_name:
 	'custom_fragment' => '
     ProxyPass http://es.service.consul:8080
     ProxyPassReverse http://es.service.consul:8080
+',
+      },
+      {
+        'path' => '/kibana',
+        'provider' => 'location',
+        'auth_type' => 'openid-connect',
+         require => {
+          enforce  => 'all',
+          requires => [
+            'claim multifactor:duo',
+            'claim groups:nubis_global_admins',
+          ],
+	},
+	'custom_fragment' => '
+    ProxyPass http://localhost:5601
+    ProxyPassReverse http://localhost:5601
 ',
       },
       {
