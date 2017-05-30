@@ -194,6 +194,7 @@ NUBIS_SUDO_GROUPS="${var.nubis_sudo_groups}"
 NUBIS_USER_GROUPS="${var.nubis_user_groups}"
 NUBIS_SSO_ZONEID="${var.zone_id}"
 NUBIS_SSO_OPENID_DOMAIN="${var.openid_domain}"
+NUBIS_SSO_MEMCACHED="${element(aws_elasticache_cluster.cache.*.configuration_endpoint, count.index)}"
 EOF
 }
 
@@ -290,7 +291,7 @@ resource "aws_elasticache_subnet_group" "sso" {
   ]
 }
 
-resource "aws_security_group" "cache" {
+resource "aws_security_group" "sessions" {
   count  = "${var.persistent_sessions * var.enabled * length(split(",", var.environments))}"
   vpc_id = "${element(split(",",var.vpc_ids), count.index)}"
 
@@ -310,6 +311,29 @@ resource "aws_security_group" "cache" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name           = "${var.project}-${element(split(",",var.environments), count.index)}-sessions"
+    Region         = "${var.aws_region}"
+    Environment    = "${element(split(",",var.environments), count.index)}"
+    TechnicalOwner = "${var.technical_contact}"
+  }
+}
+
+resource "aws_elasticache_cluster" "cache" {
+  count  = "${var.persistent_sessions * var.enabled * length(split(",", var.environments))}"
+
+  cluster_id        = "${var.project}-${element(split(",",var.environments), count.index)}-sessions"
+  engine            = "memcached"
+  node_type         = "cache.t2.micro"
+  port              = 11211
+  num_cache_nodes   = 1
+  apply_immediately = true
+  subnet_group_name = "${element(aws_elasticache_subnet_group.sso.*.name, count.index)}"
+
+  security_group_ids = [
+    "${element(aws_security_group.sessions.*.id, count.index)}",
+  ]
 
   tags = {
     Name           = "${var.project}-${element(split(",",var.environments), count.index)}-sessions"
