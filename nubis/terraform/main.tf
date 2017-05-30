@@ -276,3 +276,13 @@ resource "null_resource" "secrets" {
     command = "${self.triggers.unicreds}/openid/client_secret ${var.openid_client_secret} ${self.triggers.context}"
   }
 }
+
+resource "aws_elasticache_subnet_group" "sso" {
+  count       = "${var.persistent_sessions}"
+  name        = "${var.project}-${var.environment}-sessions-subnetgroup"
+  description = "Subnet Group for SSO Sessions in ${var.environment}"
+
+  subnet_ids = [
+    "${split(",",,var.subnet_ids)}",
+  ]
+}

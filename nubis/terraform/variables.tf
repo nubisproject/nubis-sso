@@ -63,3 +63,7 @@ variable "openid_client_secret" {
 variable "openid_domain" {
   default = "mozilla"
 }
+
+variable "persistent_sessions" {
+  default = true
+}
