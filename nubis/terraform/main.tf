@@ -278,11 +278,14 @@ resource "null_resource" "secrets" {
 }
 
 resource "aws_elasticache_subnet_group" "sso" {
-  count       = "${var.persistent_sessions}"
-  name        = "${var.project}-${var.environment}-sessions-subnetgroup"
-  description = "Subnet Group for SSO Sessions in ${var.environment}"
+  count       = "${var.persistent_sessions * var.enabled * length(split(",", var.environments))}"
+  name        = "${var.project}-${element(split(",",var.environments), count.index)}-sessions-subnetgroup"
+  description = "Subnet Group for SSO Sessions in ${element(split(",",var.environments), count.index)}"
 
+  #XXX: Fugly, assumes 3 subnets per environments, bad assumption, but valid ATM
   subnet_ids = [
-    "${split(",",,var.subnet_ids)}",
+    "${element(split(",",var.subnet_ids), (count.index * 3) + 0 )}",
+    "${element(split(",",var.subnet_ids), (count.index * 3) + 1 )}",
+    "${element(split(",",var.subnet_ids), (count.index * 3) + 2 )}",
   ]
 }
