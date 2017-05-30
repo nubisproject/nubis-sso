@@ -14,7 +14,7 @@ fi
 if [ -z "$OPENID_SERVER_PASSPHRASE" ]; then
   NUBIS_ENVIRONMENT=$(nubis-metadata NUBIS_ENVIRONMENT)
   NUBIS_PROJECT=$(nubis-metadata NUBIS_PROJECT)
-  KV_PREFIX="$NUBIS_PROJECT/$NUBIS_ENVIRONMENT/config"
+  KV_PREFIX="nubis/$NUBIS_PROJECT/$NUBIS_ENVIRONMENT/config"
 
   echo "Generating OpenID server passphrase"  
   consulate kv set "$KV_PREFIX/OpenID/Server/Passphrase" "$(uuidgen)"

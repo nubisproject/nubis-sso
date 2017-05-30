@@ -289,3 +289,32 @@ resource "aws_elasticache_subnet_group" "sso" {
     "${element(split(",",var.subnet_ids), (count.index * 3) + 2 )}",
   ]
 }
+
+resource "aws_security_group" "cache" {
+  count  = "${var.persistent_sessions * var.enabled * length(split(",", var.environments))}"
+  vpc_id = "${element(split(",",var.vpc_ids), count.index)}"
+
+  ingress {
+    from_port = 11211
+    to_port   = 11211
+    protocol  = "tcp"
+
+    security_groups = [
+      "${element(aws_security_group.sso.*.id, count.index)}",
+    ]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name           = "${var.project}-${element(split(",",var.environments), count.index)}-sessions"
+    Region         = "${var.aws_region}"
+    Environment    = "${element(split(",",var.environments), count.index)}"
+    TechnicalOwner = "${var.technical_contact}"
+  }
+}

@@ -12,12 +12,11 @@ OIDCRedirectURI https://{{ getv "/config/Domain" }}/sso
 OIDCOutgoingProxy proxy.service.consul:3128
 
 # Provider info
-# XXX: Needs to be configurable
-OIDCProviderIssuer https://auth.mozilla.auth0.com
-OIDCProviderAuthorizationEndpoint https://auth.mozilla.auth0.com/authorize
-OIDCProviderTokenEndpoint https://auth.mozilla.auth0.com/oauth/token
-OIDCProviderUserInfoEndpoint https://auth.mozilla.auth0.com/userinfo
-OIDCProviderJwksUri https://auth.mozilla.auth0.com/.well-known/jwks.json
+OIDCProviderIssuer https://auth.{{ getv "/config/OpenID/Client/Domain" }}.auth0.com
+OIDCProviderAuthorizationEndpoint https://auth.{{ getv "/config/OpenID/Client/Domain" }}.auth0.com/authorize
+OIDCProviderTokenEndpoint https://auth.{{ getv "/config/OpenID/Client/Domain" }}.auth0.com/oauth/token
+OIDCProviderUserInfoEndpoint https://auth.{{ getv "/config/OpenID/Client/Domain" }}.auth0.com/userinfo
+OIDCProviderJwksUri https://auth.{{ getv "/config/OpenID/Client/Domain" }}.auth0.com/.well-known/jwks.json
 
 # Session Cache
 OIDCCacheType memcache

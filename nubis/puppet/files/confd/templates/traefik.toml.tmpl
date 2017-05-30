@@ -16,12 +16,12 @@ address = ":8082"
 [consul]
 endpoint = "127.0.0.1:8500"
 watch = true
-prefix = "{{ getv "/config/Project" }}/{{ getv "/config/Environment" }}/traefik/config"
+prefix = "nubis/{{ getv "/config/Project" }}/{{ getv "/config/Environment" }}/traefik/config"
 
 [acme]
 # Handle when this isn't set
 email="nubis-team@mozilla.com"
-storage = "{{ getv "/config/Project" }}/{{ getv "/config/Environment" }}/traefik/acme"
+storage = "nubis/{{ getv "/config/Project" }}/{{ getv "/config/Environment" }}/traefik/acme"
 entryPoint = "https"
 
 # Disable for prod

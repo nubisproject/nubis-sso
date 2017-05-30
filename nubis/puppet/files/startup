@@ -7,7 +7,7 @@ NUBIS_DOMAIN=$(nubis-metadata NUBIS_DOMAIN)
 NUBIS_SSO_ZONEID=$(nubis-metadata NUBIS_SSO_ZONEID)
 NUBIS_REGION=$(nubis-region)
 
-KV_PREFIX="$NUBIS_PROJECT/$NUBIS_ENVIRONMENT/config"
+KV_PREFIX="nubis/$NUBIS_PROJECT/$NUBIS_ENVIRONMENT/config"
 
 echo "Setting KV previx to $KV_PREFIX"
 
@@ -28,8 +28,15 @@ else
   consulate kv rm "$KV_PREFIX/OpenID/Client/Secret"
 fi
 
+NUBIS_SSO_OPENID_DOMAIN=$(nubis-metadata NUBIS_SSO_OPENID_DOMAIN)
+if [ ! -z "$NUBIS_SSO_OPENID_DOMAIN" ]; then
+  consulate kv set "$KV_PREFIX/OpenID/Client/Domain" "$NUBIS_SSO_OPENID_DOMAIN"
+else
+  consulate kv rm "$KV_PREFIX/OpenID/Client/Domain"
+fi
+
 DNS_ENDPOINT="$NUBIS_PROJECT.$NUBIS_ENVIRONMENT.$NUBIS_REGION.$NUBIS_ACCOUNT.$NUBIS_DOMAIN"
 consulate kv set "$KV_PREFIX/Domain" "$DNS_ENDPOINT"
 
 echo "Registering ourselves in DNS for $DNS_ENDPOINT"
-AWS_REGION="$NUBIS_REGION" /usr/local/bin/asg-route53 -public=true -type A -zoneid "$NUBIS_SSO_ZONEID" "$DNS_ENDPOINT"
+AWS_REGION="$NUBIS_REGION" /usr/local/bin/asg-route53 -ttl 30 -public=true -type A -zoneid "$NUBIS_SSO_ZONEID" "$DNS_ENDPOINT"

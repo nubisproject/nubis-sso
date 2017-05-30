@@ -1,5 +1,6 @@
 $mod_auth_openidc_version = "2.2.0"
 $libcjose_version = "0.4.1"
+$asg_route53_version = "v0.0.2-beta3"
 
 class { 'nubis_apache':
   port => 82,
@@ -11,12 +12,46 @@ class { 'apache::mod::proxy': }
 class { 'apache::mod::proxy_http': }
 class { 'apache::mod::proxy_html': }
 
+apache::mod { 'sed': }
+
 file { "/var/www/html/index.html":
-  ensure => present,
+  ensure  => present,
+  owner   => 'root',
+  group   => 'root',
   require => [
     Class['Nubis_apache'],
   ],
-  content => "Hello world!"
+  source => 'puppet:///nubis/files/html/index.html',
+}
+
+file { "/var/www/html/top.html":
+  ensure  => present,
+  owner   => 'root',
+  group   => 'root',
+  require => [
+    Class['Nubis_apache'],
+  ],
+  source => 'puppet:///nubis/files/html/top.html',
+}
+
+file { "/var/www/html/bottom.html":
+  ensure  => present,
+  owner   => 'root',
+  group   => 'root',
+  require => [
+    Class['Nubis_apache'],
+  ],
+  source => 'puppet:///nubis/files/html/bottom.html',
+}
+
+file { "/var/www/html/middle.html":
+  ensure  => present,
+  owner   => 'root',
+  group   => 'root',
+  require => [
+    Class['Nubis_apache'],
+  ],
+  source => 'puppet:///nubis/files/html/middle.html',
 }
 
 apache::vhost { $project_name:
@@ -37,7 +72,14 @@ apache::vhost { $project_name:
     directories => [
       { 'path' => '/',
         'provider' => 'location',
-	'require' => 'unmanaged',
+        'auth_type' => 'openid-connect',
+         require => {
+          enforce  => 'all',
+          requires => [
+            'claim multifactor:duo',
+            'claim groups:nubis_global_admins',
+          ],
+	},
 	'custom_fragment' => 'ExpiresActive Off',
       },
       {
@@ -52,8 +94,15 @@ apache::vhost { $project_name:
           ],
 	},
 	'custom_fragment' => '
-    ProxyPass http://consul.service.consul:8500/ui/
-    ProxyPassReverse http://consul.service.consul:8500/ui/
+    # We need to decompress, sed, then recompress
+    AddOutputFilterByType INFLATE;Sed;DEFLATE text/html
+    # Look for a string like
+    # var consulHost = \'\'
+    # In consuls webUI
+    OutputSed "s/\(var *consulHost *= *\)\'\'/\1\'\/consul\'/"
+
+    ProxyPass http://consul.service.consul:8500
+    ProxyPassReverse http://consul.service.consul:8500
 ',
       },
       {
@@ -86,6 +135,7 @@ apache::vhost { $project_name:
 	'custom_fragment' => '
     ProxyPass http://localhost:5601
     ProxyPassReverse http://localhost:5601
+    OIDCPassClaimsAs none
 ',
       },
       {
@@ -177,7 +227,7 @@ ServerName sso.stage.us-west-2.nubis-gozer.nubis.allizom.org
 
 
 staging::file { '/usr/local/bin/asg-route53':
-  source => "https://github.com/gozer/asg-route53/releases/download/v0.0.2-beta2/asg-route53.v0.0.2-beta2-linux_amd64",
+  source => "https://github.com/gozer/asg-route53/releases/download/${asg_route53_version}/asg-route53.${asg_route53_version}-linux_amd64",
   target => '/usr/local/bin/asg-route53',
 }->
 exec { 'chmod asg-route53':

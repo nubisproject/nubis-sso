@@ -1,7 +1,7 @@
 [template]
 src = "sso-generated.tmpl"
 dest = "/etc/nubis-config/nubis-sso-generated.sh"
-prefix = "/%%PROJECT%%/%%ENVIRONMENT%%"
+prefix = "/nubis/%%PROJECT%%/%%ENVIRONMENT%%"
 
 uid = 0
 gid = 0
