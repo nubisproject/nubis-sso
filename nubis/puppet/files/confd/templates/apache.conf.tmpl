@@ -18,6 +18,8 @@ OIDCProviderTokenEndpoint https://auth.{{ getv "/config/OpenID/Client/Domain" }}
 OIDCProviderUserInfoEndpoint https://auth.{{ getv "/config/OpenID/Client/Domain" }}.auth0.com/userinfo
 OIDCProviderJwksUri https://auth.{{ getv "/config/OpenID/Client/Domain" }}.auth0.com/.well-known/jwks.json
 
+{{ if exists "/config/OpenID/Server/Memcached" }}
 # Session Cache
 OIDCCacheType memcache
-OIDCMemCacheServers localhost
+OIDCMemCacheServers {{ getv "/config/OpenID/Server/Memcached" }}
+{{ end }}
