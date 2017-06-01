@@ -61,6 +61,12 @@ apache::vhost { 'localhost':
     docroot            => '/var/www/html',
     docroot_owner      => 'root',
     docroot_group      => 'root',
+    setenvif           => [
+      'X-Forwarded-Proto https HTTPS=on',
+      'Remote_Addr 127\.0\.0\.1 internal',
+    ],
+    access_log_env_var => '!internal',
+    access_log_format  => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"',
 }
 
 apache::vhost { $project_name:
