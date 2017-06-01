@@ -1,2 +1,2 @@
 <small><a target=middle href="/sso?logout=">Logout</a></small>
-<small><a target=middle href="/sso?info=json">info()</a></small>
+<small><a target=middle href="/sso?info=json"><!--#echo var="OIDC_CLAIM_email" --></a></small>
