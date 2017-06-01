@@ -11,6 +11,7 @@ class { 'apache::mod::rewrite': }
 class { 'apache::mod::proxy': }
 class { 'apache::mod::proxy_http': }
 class { 'apache::mod::proxy_html': }
+class { 'apache::mod::include': }
 
 apache::mod { 'sed': }
 
@@ -24,24 +25,24 @@ file { "/var/www/html/index.html":
   source => 'puppet:///nubis/files/html/index.html',
 }
 
-file { "/var/www/html/top.html":
+file { "/var/www/html/top.shtml":
   ensure  => present,
   owner   => 'root',
   group   => 'root',
   require => [
     Class['Nubis_apache'],
   ],
-  source => 'puppet:///nubis/files/html/top.html',
+  source => 'puppet:///nubis/files/html/top.shtml',
 }
 
-file { "/var/www/html/bottom.html":
+file { "/var/www/html/bottom.shtml":
   ensure  => present,
   owner   => 'root',
   group   => 'root',
   require => [
     Class['Nubis_apache'],
   ],
-  source => 'puppet:///nubis/files/html/bottom.html',
+  source => 'puppet:///nubis/files/html/bottom.shtml',
 }
 
 file { "/var/www/html/middle.html":
@@ -52,6 +53,14 @@ file { "/var/www/html/middle.html":
     Class['Nubis_apache'],
   ],
   source => 'puppet:///nubis/files/html/middle.html',
+}
+
+apache::vhost { 'localhost':
+    port               => 82,
+    default_vhost      => false,
+    docroot            => '/var/www/html',
+    docroot_owner      => 'root',
+    docroot_group      => 'root',
 }
 
 apache::vhost { $project_name:
@@ -70,6 +79,10 @@ apache::vhost { $project_name:
     access_log_format  => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"',
     
     directories => [
+      { 'path' => '/var/www/html',
+        'provider' => 'directory',
+        'options' => '+Includes',
+      },
       { 'path' => '/',
         'provider' => 'location',
         'auth_type' => 'openid-connect',
@@ -103,6 +116,23 @@ apache::vhost { $project_name:
 
     ProxyPass http://consul.service.consul:8500
     ProxyPassReverse http://consul.service.consul:8500
+',
+      },
+      {
+        'path' => '/jenkins',
+        'provider' => 'location',
+        'auth_type' => 'openid-connect',
+         require => {
+          enforce  => 'all',
+          requires => [
+            'claim multifactor:duo',
+            'claim groups:nubis_global_admins',
+          ],
+        },
+        'custom_fragment' => '
+    SetEnv proxy-nokeepalive 1
+    ProxyPass http://jenkins.service.consul:8080/jenkins
+    ProxyPassReverse http://jenkins.service.consul:8080/jenkins
 ',
       },
       {
