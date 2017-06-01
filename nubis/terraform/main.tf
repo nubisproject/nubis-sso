@@ -159,6 +159,10 @@ POLICY
 resource "aws_launch_configuration" "sso" {
   count = "${var.enabled * length(split(",", var.environments))}"
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   name_prefix = "${var.project}-${element(split(",",var.environments), count.index)}-${var.aws_region}-"
   
   image_id = "${module.sso-image.image_id}"
@@ -200,6 +204,10 @@ EOF
 
 resource "aws_autoscaling_group" "sso" {
   count = "${var.enabled * length(split(",", var.environments))}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   #XXX: Fugly, assumes 3 subnets per environments, bad assumption, but valid ATM
   vpc_zone_identifier = [
@@ -280,6 +288,11 @@ resource "null_resource" "secrets" {
 
 resource "aws_elasticache_subnet_group" "sso" {
   count       = "${var.persistent_sessions * var.enabled * length(split(",", var.environments))}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
   name        = "${var.project}-${element(split(",",var.environments), count.index)}-sessions-subnetgroup"
   description = "Subnet Group for SSO Sessions in ${element(split(",",var.environments), count.index)}"
 
@@ -293,6 +306,11 @@ resource "aws_elasticache_subnet_group" "sso" {
 
 resource "aws_security_group" "sessions" {
   count  = "${var.persistent_sessions * var.enabled * length(split(",", var.environments))}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
   vpc_id = "${element(split(",",var.vpc_ids), count.index)}"
 
   ingress {
@@ -322,6 +340,10 @@ resource "aws_security_group" "sessions" {
 
 resource "aws_elasticache_cluster" "cache" {
   count  = "${var.persistent_sessions * var.enabled * length(split(",", var.environments))}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   cluster_id        = "${var.project}-${element(split(",",var.environments), count.index)}-sessions"
   engine            = "memcached"
