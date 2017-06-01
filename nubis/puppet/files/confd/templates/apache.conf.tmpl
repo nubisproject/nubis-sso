@@ -1,3 +1,6 @@
+# Set NUBIS_ENVIRONMENT for consumers
+SetEnv NUBIS_ENVIRONMENT {{ getv "/config/Environment" }}
+
 # Secrets
 OIDCClientID {{ getv "/config/OpenID/Client/ID" }}
 OIDCClientSecret {{ getv "/config/OpenID/Client/Secret" }}
