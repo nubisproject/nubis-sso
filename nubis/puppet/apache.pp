@@ -120,7 +120,7 @@ apache::vhost { $project_name:
     # In consuls webUI
     OutputSed "s/\(var *consulHost *= *\)\'\'/\1\'\/consul\'/"
 
-    ProxyPass http://consul.service.consul:8500
+    ProxyPass http://consul.service.consul:8500 disablereuse=on ttl=60
     ProxyPassReverse http://consul.service.consul:8500
 ',
       },
@@ -137,7 +137,7 @@ apache::vhost { $project_name:
         },
         'custom_fragment' => '
     SetEnv proxy-nokeepalive 1
-    ProxyPass http://jenkins.service.consul:8080/jenkins
+    ProxyPass http://jenkins.service.consul:8080/jenkins disablereuse=on ttl=60 keepalive=off timeout=10
     ProxyPassReverse http://jenkins.service.consul:8080/jenkins
 ',
       },
@@ -153,7 +153,7 @@ apache::vhost { $project_name:
           ],
 	},
 	'custom_fragment' => '
-    ProxyPass http://es.service.consul:8080
+    ProxyPass http://es.service.consul:8080 disablereuse=on ttl=60
     ProxyPassReverse http://es.service.consul:8080
 ',
       },
@@ -169,7 +169,7 @@ apache::vhost { $project_name:
           ],
 	},
 	'custom_fragment' => '
-    ProxyPass http://localhost:5601
+    ProxyPass http://localhost:5601 disablereuse=on ttl=60
     ProxyPassReverse http://localhost:5601
     OIDCPassClaimsAs none
 ',
@@ -186,7 +186,7 @@ apache::vhost { $project_name:
           ],
 	},
 	'custom_fragment' => '
-    ProxyPass http://prometheus.service.consul:81/prometheus
+    ProxyPass http://prometheus.service.consul:81/prometheus disablereuse=on ttl=60
     ProxyPassReverse http://prometheus.service.consul:81/prometheus
 ',
       },
@@ -202,7 +202,7 @@ apache::vhost { $project_name:
           ],
 	},
 	'custom_fragment' => '
-    ProxyPass http://alertmanager.service.consul:9093/alertmanager
+    ProxyPass http://alertmanager.service.consul:9093/alertmanager disablereuse=on ttl=60
     ProxyPassReverse http://alertmanager.service.consul:9093/alertmanager
 ',
       },
@@ -218,7 +218,7 @@ apache::vhost { $project_name:
           ],
 	},
 	'custom_fragment' => '
-    ProxyPass http://grafana.service.consul:3000
+    ProxyPass http://grafana.service.consul:3000 disablereuse=on ttl=60
     ProxyPassReverse http://grafana.service.consul:3000
 ',
       },
