@@ -3,6 +3,7 @@ $libcjose_version = "0.4.1"
 $asg_route53_version = "v0.0.2-beta3"
 
 class { 'nubis_apache':
+  project_name => 'sso',
   port => 82,
 }
 
