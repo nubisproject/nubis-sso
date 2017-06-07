@@ -245,6 +245,7 @@ OIDCPassIDTokenAs claims serialized
 OIDCOAuthTokenIntrospectionInterval 15
 OIDCUserInfoRefreshInterval 15
 OIDCSessionMaxDuration 0
+OIDCSessionInactivityTimeout 43200
 
 ServerName sso.stage.us-west-2.nubis-gozer.nubis.allizom.org
 ",
