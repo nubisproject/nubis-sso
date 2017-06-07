@@ -2,7 +2,7 @@
 <head></head>
 <body>
 <img align="middle" height=54 width=54 src="https://avatars2.githubusercontent.com/u/11081104?v=3">
-<b>[<!--#echo var="NUBIS_ENVIRONMENT" -->]</b>
+<b>[<!--#echo var="NUBIS_ACCOUNT" -->][<!--#echo var="NUBIS_ENVIRONMENT" -->]</b>
 <a target="middle" href=/consul/ui/>[Key-Value]</a></li>
 <a target="middle" href=/prometheus/graph>[Monitoring]</a></li>
 <a target="middle" href=/alertmanager>[Alerting]</a></li>

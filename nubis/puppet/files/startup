@@ -13,6 +13,7 @@ echo "Setting KV previx to $KV_PREFIX"
 
 consulate kv set "$KV_PREFIX/Project" "$NUBIS_PROJECT"
 consulate kv set "$KV_PREFIX/Environment" "$NUBIS_ENVIRONMENT"
+consulate kv set "$KV_PREFIX/Account" "$NUBIS_ACCOUNT"
 
 OPENID_CLIENT_ID=$(nubis-secret get openid/client_id 2>/dev/null)
 if [ ! -z "$OPENID_CLIENT_ID" ]; then
