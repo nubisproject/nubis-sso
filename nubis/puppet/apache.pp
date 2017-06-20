@@ -46,16 +46,6 @@ file { "/var/www/html/bottom.shtml":
   source => 'puppet:///nubis/files/html/bottom.shtml',
 }
 
-file { "/var/www/html/middle.html":
-  ensure  => present,
-  owner   => 'root',
-  group   => 'root',
-  require => [
-    Class['Nubis_apache'],
-  ],
-  source => 'puppet:///nubis/files/html/middle.html',
-}
-
 apache::vhost { 'localhost':
     port               => 82,
     default_vhost      => false,
