@@ -15,6 +15,7 @@ class { 'apache::mod::proxy_html': }
 class { 'apache::mod::include': }
 
 apache::mod { 'sed': }
+apache::mod { 'macro': }
 
 file { "/var/www/html/index.html":
   ensure  => present,
@@ -83,26 +84,15 @@ apache::vhost { $project_name:
       { 'path' => '/',
         'provider' => 'location',
         'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
-	'custom_fragment' => 'ExpiresActive Off',
+	'require' => 'unmanaged',
+	'custom_fragment' => '
+	Use RequireAdminsOrUsers
+	ExpiresActive Off',
       },
       {
         'path' => '/consul',
         'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
+	'require' => 'unmanaged',
 	'custom_fragment' => '
     # We need to decompress, sed, then recompress
     AddOutputFilterByType INFLATE;Sed;DEFLATE text/html
@@ -118,14 +108,7 @@ apache::vhost { $project_name:
       {
         'path' => '/jenkins',
         'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-        },
+	'require' => 'unmanaged',
         'custom_fragment' => '
     SetEnv proxy-nokeepalive 1
     ProxyPass http://jenkins.service.consul:8080/jenkins disablereuse=on ttl=60 keepalive=off timeout=10
@@ -135,14 +118,7 @@ apache::vhost { $project_name:
       {
         'path' => '/elasticsearch',
         'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
+	'require' => 'unmanaged',
 	'custom_fragment' => '
     ProxyPass http://es.service.consul:8080 disablereuse=on ttl=60
     ProxyPassReverse http://es.service.consul:8080
@@ -151,14 +127,7 @@ apache::vhost { $project_name:
       {
         'path' => '/kibana',
         'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
+	'require' => 'unmanaged',
 	'custom_fragment' => '
     ProxyPass http://localhost:5601 disablereuse=on ttl=60
     ProxyPassReverse http://localhost:5601
@@ -168,14 +137,7 @@ apache::vhost { $project_name:
       {
         'path' => '/prometheus',
         'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
+	'require' => 'unmanaged',
 	'custom_fragment' => '
     ProxyPass http://prometheus.service.consul:81/prometheus disablereuse=on ttl=60
     ProxyPassReverse http://prometheus.service.consul:81/prometheus
@@ -184,14 +146,7 @@ apache::vhost { $project_name:
       {
         'path' => '/alertmanager',
         'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
+	'require' => 'unmanaged',
 	'custom_fragment' => '
     ProxyPass http://alertmanager.service.consul:9093/alertmanager disablereuse=on ttl=60
     ProxyPassReverse http://alertmanager.service.consul:9093/alertmanager
@@ -200,14 +155,7 @@ apache::vhost { $project_name:
       {
         'path' => '/grafana',
         'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
+	'require' => 'unmanaged',
 	'custom_fragment' => '
     ProxyPass http://grafana.service.consul:3000 disablereuse=on ttl=60
     ProxyPassReverse http://grafana.service.consul:3000
@@ -244,13 +192,6 @@ ServerName sso.stage.us-west-2.nubis-gozer.nubis.allizom.org
       "set X-SSO-Nubis-Project ${project_name}",
       "set X-SSO-Nubis-Build   ${packer_build_name}",
     ],
-    #rewrites           => [
-    #  {
-    #    comment      => 'HTTPS redirect',
-    #    rewrite_cond => ['%{HTTP:X-Forwarded-Proto} =http'],
-    #    rewrite_rule => ['. https://%{HTTP:Host}%{REQUEST_URI} [L,R=permanent]'],
-    #  }
-    #]
 }
 
 
