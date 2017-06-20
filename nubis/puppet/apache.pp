@@ -83,19 +83,19 @@ apache::vhost { $project_name:
         'options'  => '+Includes',
       },
       {
-        'path'      => '/',
-        'provider'  => 'location',
-        'auth_type' => 'openid-connect',
-  'require'         => 'unmanaged',
-  'custom_fragment' => '
+        'path'            => '/',
+        'provider'        => 'location',
+        'auth_type'       => 'openid-connect',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
 	Use RequireAdminsOrUsers
 	ExpiresActive Off',
       },
       {
-        'path'      => '/consul',
-        'provider'  => 'location',
-  'require'         => 'unmanaged',
-  'custom_fragment' => '
+        'path'            => '/consul',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
     # We need to decompress, sed, then recompress
     AddOutputFilterByType INFLATE;Sed;DEFLATE text/html
     # Look for a string like
@@ -110,7 +110,7 @@ apache::vhost { $project_name:
       {
         'path'            => '/jenkins',
         'provider'        => 'location',
-  'require'               => 'unmanaged',
+        'require'         => 'unmanaged',
         'custom_fragment' => '
     SetEnv proxy-nokeepalive 1
     ProxyPass http://jenkins.service.consul:8080/jenkins disablereuse=on ttl=60 keepalive=off timeout=10
@@ -118,47 +118,47 @@ apache::vhost { $project_name:
 ',
       },
       {
-        'path'      => '/elasticsearch',
-        'provider'  => 'location',
-  'require'         => 'unmanaged',
-  'custom_fragment' => '
+        'path'            => '/elasticsearch',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
     ProxyPass http://es.service.consul:8080 disablereuse=on ttl=60
     ProxyPassReverse http://es.service.consul:8080
 ',
       },
       {
-        'path'      => '/kibana',
-        'provider'  => 'location',
-  'require'         => 'unmanaged',
-  'custom_fragment' => '
+        'path'            => '/kibana',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
     ProxyPass http://localhost:5601 disablereuse=on ttl=60
     ProxyPassReverse http://localhost:5601
     OIDCPassClaimsAs none
 ',
       },
       {
-        'path'      => '/prometheus',
-        'provider'  => 'location',
-  'require'         => 'unmanaged',
-  'custom_fragment' => '
+        'path'            => '/prometheus',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
     ProxyPass http://prometheus.service.consul:81/prometheus disablereuse=on ttl=60
     ProxyPassReverse http://prometheus.service.consul:81/prometheus
 ',
       },
       {
-        'path'      => '/alertmanager',
-        'provider'  => 'location',
-  'require'         => 'unmanaged',
-  'custom_fragment' => '
+        'path'            => '/alertmanager',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
     ProxyPass http://alertmanager.service.consul:9093/alertmanager disablereuse=on ttl=60
     ProxyPassReverse http://alertmanager.service.consul:9093/alertmanager
 ',
       },
       {
-        'path'      => '/grafana',
-        'provider'  => 'location',
-  'require'         => 'unmanaged',
-  'custom_fragment' => '
+        'path'            => '/grafana',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
     ProxyPass http://grafana.service.consul:3000 disablereuse=on ttl=60
     ProxyPassReverse http://grafana.service.consul:3000
 ',
