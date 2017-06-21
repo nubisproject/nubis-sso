@@ -43,6 +43,20 @@ else
   consulate kv rm "$KV_PREFIX/OpenID/Server/Memcached"
 fi
 
+NUBIS_USER_GROUPS=$(nubis-metadata NUBIS_USER_GROUPS)
+if [ ! -z "$NUBIS_USER_GROUPS" ]; then
+  consulate kv set "$KV_PREFIX/UserGroups" "$NUBIS_USER_GROUPS"
+else
+  consulate kv rm "$KV_PREFIX/UserGroups"
+fi
+
+NUBIS_SUDO_GROUPS=$(nubis-metadata NUBIS_SUDO_GROUPS)
+if [ ! -z "$NUBIS_SUDO_GROUPS" ]; then
+  consulate kv set "$KV_PREFIX/SudoGroups" "$NUBIS_SUDO_GROUPS"
+else
+  consulate kv rm "$KV_PREFIX/SudoGroups"
+fi
+
 DNS_ENDPOINT="$NUBIS_PROJECT.$NUBIS_ENVIRONMENT.$NUBIS_REGION.$NUBIS_ACCOUNT.$NUBIS_DOMAIN"
 consulate kv set "$KV_PREFIX/Domain" "$DNS_ENDPOINT"
 

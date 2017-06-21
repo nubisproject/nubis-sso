@@ -1,0 +1,24 @@
+# Limit Access to Admins
+<Macro RequireOnlyAdmins>
+  <RequireAll>
+    Require claim multifactor:duo
+    <RequireAny>
+{{ if exists "/config/SudoGroups" }}{{ range split (getv "/config/SudoGroups") "," }}      Require claim groups:{{.}}
+{{ end }}{{ end }}
+    </RequireAny>
+  </RequireAll>
+</Macro>
+
+# Limit Access to Regular users and Admins
+<Macro RequireAdminsOrUsers>
+  <RequireAll>
+    Require claim multifactor:duo
+    <RequireAny>
+      #Admins
+{{ if exists "/config/SudoGroups" }}{{ range split (getv "/config/SudoGroups") "," }}      Require claim groups:{{.}}{{ end }}{{ end }}
+      #Users
+{{ if exists "/config/UserGroups" }}{{ range split (getv "/config/UserGroups") "," }}      Require claim groups:{{.}}
+{{ end }}{{ end }}
+    </RequireAny>
+  </RequireAll>
+</Macro>

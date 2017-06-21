@@ -8,9 +8,9 @@ file { '/etc/confd':
 }
 
 file { '/usr/local/bin/nubis-sso-generated':
-  ensure  => 'present',
-  mode    => '0755',
-  owner   => 'root',
-  group   => 'root',
-  source  => 'puppet:///nubis/files/generated',
+  ensure => 'present',
+  mode   => '0755',
+  owner  => 'root',
+  group  => 'root',
+  source => 'puppet:///nubis/files/generated',
 }
