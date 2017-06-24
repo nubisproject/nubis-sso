@@ -1,10 +1,10 @@
-$mod_auth_openidc_version = "2.2.0"
-$libcjose_version = "0.4.1"
-$asg_route53_version = "v0.0.2-beta3"
+$mod_auth_openidc_version = '2.2.0'
+$libcjose_version = '0.4.1'
+$asg_route53_version = 'v0.0.2-beta3'
 
 class { 'nubis_apache':
   project_name => 'sso',
-  port => 82,
+  port         => 82,
 }
 
 # Add modules
@@ -15,45 +15,36 @@ class { 'apache::mod::proxy_html': }
 class { 'apache::mod::include': }
 
 apache::mod { 'sed': }
+apache::mod { 'macro': }
 
-file { "/var/www/html/index.html":
+file { '/var/www/html/index.html':
   ensure  => present,
   owner   => 'root',
   group   => 'root',
   require => [
     Class['Nubis_apache'],
   ],
-  source => 'puppet:///nubis/files/html/index.html',
+  source  => 'puppet:///nubis/files/html/index.html',
 }
 
-file { "/var/www/html/top.shtml":
+file { '/var/www/html/top.shtml':
   ensure  => present,
   owner   => 'root',
   group   => 'root',
   require => [
     Class['Nubis_apache'],
   ],
-  source => 'puppet:///nubis/files/html/top.shtml',
+  source  => 'puppet:///nubis/files/html/top.shtml',
 }
 
-file { "/var/www/html/bottom.shtml":
+file { '/var/www/html/bottom.shtml':
   ensure  => present,
   owner   => 'root',
   group   => 'root',
   require => [
     Class['Nubis_apache'],
   ],
-  source => 'puppet:///nubis/files/html/bottom.shtml',
-}
-
-file { "/var/www/html/middle.html":
-  ensure  => present,
-  owner   => 'root',
-  group   => 'root',
-  require => [
-    Class['Nubis_apache'],
-  ],
-  source => 'puppet:///nubis/files/html/middle.html',
+  source  => 'puppet:///nubis/files/html/bottom.shtml',
 }
 
 apache::vhost { 'localhost':
@@ -84,36 +75,27 @@ apache::vhost { $project_name:
     ],
     access_log_env_var => '!internal',
     access_log_format  => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"',
-    
-    directories => [
-      { 'path' => '/var/www/html',
+
+    directories        => [
+      {
+        'path'     => '/var/www/html',
         'provider' => 'directory',
-        'options' => '+Includes',
-      },
-      { 'path' => '/',
-        'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
-	'custom_fragment' => 'ExpiresActive Off',
+        'options'  => '+Includes',
       },
       {
-        'path' => '/consul',
-        'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
-	'custom_fragment' => '
+        'path'            => '/',
+        'provider'        => 'location',
+        'auth_type'       => 'openid-connect',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
+	Use RequireAdminsOrUsers
+	ExpiresActive Off',
+      },
+      {
+        'path'            => '/consul',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
     # We need to decompress, sed, then recompress
     AddOutputFilterByType INFLATE;Sed;DEFLATE text/html
     # Look for a string like
@@ -126,16 +108,9 @@ apache::vhost { $project_name:
 ',
       },
       {
-        'path' => '/jenkins',
-        'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-        },
+        'path'            => '/jenkins',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
         'custom_fragment' => '
     SetEnv proxy-nokeepalive 1
     ProxyPass http://jenkins.service.consul:8080/jenkins disablereuse=on ttl=60 keepalive=off timeout=10
@@ -143,91 +118,56 @@ apache::vhost { $project_name:
 ',
       },
       {
-        'path' => '/elasticsearch',
-        'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
-	'custom_fragment' => '
+        'path'            => '/elasticsearch',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
     ProxyPass http://es.service.consul:8080 disablereuse=on ttl=60
     ProxyPassReverse http://es.service.consul:8080
 ',
       },
       {
-        'path' => '/kibana',
-        'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
-	'custom_fragment' => '
+        'path'            => '/kibana',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
     ProxyPass http://localhost:5601 disablereuse=on ttl=60
     ProxyPassReverse http://localhost:5601
     OIDCPassClaimsAs none
 ',
       },
       {
-        'path' => '/prometheus',
-        'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
-	'custom_fragment' => '
+        'path'            => '/prometheus',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
     ProxyPass http://prometheus.service.consul:81/prometheus disablereuse=on ttl=60
     ProxyPassReverse http://prometheus.service.consul:81/prometheus
 ',
       },
       {
-        'path' => '/alertmanager',
-        'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
-	'custom_fragment' => '
+        'path'            => '/alertmanager',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
     ProxyPass http://alertmanager.service.consul:9093/alertmanager disablereuse=on ttl=60
     ProxyPassReverse http://alertmanager.service.consul:9093/alertmanager
 ',
       },
       {
-        'path' => '/grafana',
-        'provider' => 'location',
-        'auth_type' => 'openid-connect',
-         require => {
-          enforce  => 'all',
-          requires => [
-            'claim multifactor:duo',
-            'claim groups:nubis_global_admins',
-          ],
-	},
-	'custom_fragment' => '
+        'path'            => '/grafana',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
     ProxyPass http://grafana.service.consul:3000 disablereuse=on ttl=60
     ProxyPassReverse http://grafana.service.consul:3000
 ',
       },
-      { 
-        'path' => '/sso',
-        'provider' => 'location',
+      {
+        'path'      => '/sso',
+        'provider'  => 'location',
         'auth_type' => 'openid-connect',
-         require => "valid-user",
+        require     => 'valid-user',
       },
     ],
     custom_fragment    => "
@@ -245,6 +185,7 @@ OIDCPassIDTokenAs claims serialized
 OIDCOAuthTokenIntrospectionInterval 15
 OIDCUserInfoRefreshInterval 15
 OIDCSessionMaxDuration 0
+OIDCSessionInactivityTimeout 43200
 
 ServerName sso.stage.us-west-2.nubis-gozer.nubis.allizom.org
 ",
@@ -253,13 +194,6 @@ ServerName sso.stage.us-west-2.nubis-gozer.nubis.allizom.org
       "set X-SSO-Nubis-Project ${project_name}",
       "set X-SSO-Nubis-Build   ${packer_build_name}",
     ],
-    #rewrites           => [
-    #  {
-    #    comment      => 'HTTPS redirect',
-    #    rewrite_cond => ['%{HTTP:X-Forwarded-Proto} =http'],
-    #    rewrite_rule => ['. https://%{HTTP:Host}%{REQUEST_URI} [L,R=permanent]'],
-    #  }
-    #]
 }
 
 
@@ -273,31 +207,31 @@ exec { 'chmod asg-route53':
 }
 
 # Install mod_auth_openidc and dependency
-package { "libjansson4":
+package { 'libjansson4':
   ensure => installed,
 }->
-package { "libhiredis0.10":
+package { 'libhiredis0.10':
   ensure => installed,
 }->
-package { "memcached":
+package { 'memcached':
   ensure => installed,
 }->
 staging::file { 'libcjose0.deb':
   source => "https://github.com/pingidentity/mod_auth_openidc/releases/download/v${mod_auth_openidc_version}/libcjose0_${libcjose_version}-1.${::lsbdistcodename}.1_${::architecture}.deb",
 }->
-package { "libcjose0":
+package { 'libcjose0':
+  ensure   => installed,
   provider => dpkg,
-  ensure => installed,
-  source => '/opt/staging/libcjose0.deb'
+  source   => '/opt/staging/libcjose0.deb'
 }->
 staging::file { 'mod_auth_openidc.deb':
   source => "https://github.com/pingidentity/mod_auth_openidc/releases/download/v${mod_auth_openidc_version}/libapache2-mod-auth-openidc_${mod_auth_openidc_version}-1.${::lsbdistcodename}.1_${::architecture}.deb",
 }->
-package { "mod_auth_openidc":
+package { 'mod_auth_openidc':
+  ensure   => installed,
   provider => dpkg,
-  ensure => installed,
-  source => '/opt/staging/mod_auth_openidc.deb',
-  require => [
+  source   => '/opt/staging/mod_auth_openidc.deb',
+  require  => [
     Class['Nubis_apache'],
   ]
 }->
