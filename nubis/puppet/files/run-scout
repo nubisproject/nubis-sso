@@ -1,0 +1,6 @@
+#!/bin/bash
+# Just runs awsscout2 and symlinks report.html to index.html
+
+/usr/local/bin/Scout2 --force --no-browser  --report-dir /var/www/html/scout && {
+    ln -s /var/www/html/scout/report.html /var/www/html/scout/index.html
+}
