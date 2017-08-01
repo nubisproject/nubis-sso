@@ -9,6 +9,7 @@
 <a target="middle" href=/grafana/>[Graphs]</a></li>
 <a target="middle" href=/kibana/app/kibana>[Logs]</a></li>
 <!--#if expr='v("NUBIS_ENVIRONMENT") = "admin"' -->
+<a target="middle" href=/scout/>[Scout-Dashboard]</a></li>
 <a target="middle" href=/jenkins/>[Pipeline]</a></li>
 <!--#endif -->
 </body>
