@@ -27,16 +27,6 @@ file { '/var/www/html/index.html':
   source  => 'puppet:///nubis/files/html/index.html',
 }
 
-file { '/var/www/html/top.shtml':
-  ensure  => present,
-  owner   => 'root',
-  group   => 'root',
-  require => [
-    Class['Nubis_apache'],
-  ],
-  source  => 'puppet:///nubis/files/html/top.shtml',
-}
-
 file { '/var/www/html/bottom.shtml':
   ensure  => present,
   owner   => 'root',
