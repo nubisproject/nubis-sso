@@ -20,9 +20,9 @@ file { "${consul_template::config_dir}/top.shtml.ctmpl":
 }
 
 # Configure our watch
-consul_template::watch { 'top.html':
-    source      => "${consul_template::config_dir}/top.html.ctmpl",
-    destination => '/var/www/html/top.html',
+consul_template::watch { 'top.shtml':
+    source      => "${consul_template::config_dir}/top.shtml.ctmpl",
+    destination => '/var/www/html/top.shtml',
     command     => '/usr/bin/true',
     require     => [
       File["${consul_template::config_dir}/top.shtml.ctmpl"],
