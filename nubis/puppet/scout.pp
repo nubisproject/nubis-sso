@@ -38,7 +38,7 @@ file { '/usr/local/bin/nubis-scout-ruleset.json':
 }
 
 # This needs to be here so that we can run scout once
-file { '/etc/nubis.d/999-run-scout':
+file { '/etc/nubis.d/zzz-run-scout':
   ensure  => link,
   target  => '/usr/local/bin/run-scout',
   require => File['/usr/local/bin/run-scout'],
