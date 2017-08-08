@@ -2,6 +2,23 @@ python::pip { 'AWSScout2':
   ensure =>  '3.0.3'
 }
 
+file { '/var/www/html/scout':
+  ensure => directory,
+  owner   => 'root',
+  group   => 'root',
+  require => [
+    Class['nubis_apache'],
+  ],
+}
+
+file { '/var/www/html/scout/index.html':
+  ensure => link,
+  target => 'report.html',
+  require => [
+    File['/var/www/html/scout'],
+  ],
+}
+
 file { '/usr/local/bin/run-scout':
   ensure  => file,
   owner   => root,
