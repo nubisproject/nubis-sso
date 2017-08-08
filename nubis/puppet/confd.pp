@@ -14,3 +14,11 @@ file { '/usr/local/bin/nubis-sso-generated':
   group  => 'root',
   source => 'puppet:///nubis/files/generated',
 }
+
+file { '/etc/apache2/conf.d/sso-require-macros.conf':
+  ensure  => 'present',
+  mode    => '0644',
+  owner   => 'root',
+  group   => 'root',
+  content => '<Macro RequireAdminsOrUsers></Macro>',
+}

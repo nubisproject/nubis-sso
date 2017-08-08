@@ -3,8 +3,9 @@ $libcjose_version = '0.4.1'
 $asg_route53_version = 'v0.0.2-beta3'
 
 class { 'nubis_apache':
-  project_name => 'sso',
-  port         => 82,
+  project_name    => 'sso',
+  port            => 82,
+  mpm_module_type => 'prefork',
 }
 
 # Add modules
@@ -25,16 +26,6 @@ file { '/var/www/html/index.html':
     Class['Nubis_apache'],
   ],
   source  => 'puppet:///nubis/files/html/index.html',
-}
-
-file { '/var/www/html/top.shtml':
-  ensure  => present,
-  owner   => 'root',
-  group   => 'root',
-  require => [
-    Class['Nubis_apache'],
-  ],
-  source  => 'puppet:///nubis/files/html/top.shtml',
 }
 
 file { '/var/www/html/bottom.shtml':
