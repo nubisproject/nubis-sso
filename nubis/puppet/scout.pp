@@ -3,7 +3,7 @@ python::pip { 'AWSScout2':
 }
 
 file { '/var/www/html/scout':
-  ensure => directory,
+  ensure  => directory,
   owner   => 'root',
   group   => 'root',
   require => [
@@ -12,8 +12,8 @@ file { '/var/www/html/scout':
 }
 
 file { '/var/www/html/scout/index.html':
-  ensure => link,
-  target => 'report.html',
+  ensure  => link,
+  target  => 'report.html',
   require => [
     File['/var/www/html/scout'],
   ],
