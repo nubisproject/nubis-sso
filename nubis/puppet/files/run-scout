@@ -1,0 +1,4 @@
+#!/bin/bash -l
+
+nice -n 19 /usr/local/bin/Scout2 --force --no-browser  --report-dir /var/www/html/scout --ruleset /usr/local/bin/nubis-scout-ruleset.json &
+disown

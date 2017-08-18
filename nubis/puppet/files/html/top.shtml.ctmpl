@@ -8,8 +8,17 @@
 <a target="middle" href=/alertmanager>[Alerting]</a></li>
 <a target="middle" href=/grafana/>[Graphs]</a></li>
 <a target="middle" href=/kibana/app/kibana>[Logs]</a></li>
+<a target="middle" href=/scout/>[Security-Beta]</a></li>
 <!--#if expr='v("NUBIS_ENVIRONMENT") = "admin"' -->
 <a target="middle" href=/jenkins/>[Pipeline]</a></li>
 <!--#endif -->
+{{range services}}
+  {{ if .Tags | contains "sso=true" }}|{{range service .Name }}
+    <a target="middle" href=/admin/{{.Name}}/>[{{.Name}}]</a></li>
+    {{end}}
+  {{end}}
+{{end}}
 </body>
+
+<!-- {{ timestamp }} -->
 

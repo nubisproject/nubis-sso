@@ -38,16 +38,16 @@ resource "aws_security_group" "sso" {
     from_port = 80
     to_port   = 80
     protocol  = "tcp"
-    
+
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Traefik 
+  # Traefik
   ingress {
     from_port = 443
     to_port   = 443
     protocol  = "tcp"
-    
+
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -156,6 +156,18 @@ resource "aws_iam_role_policy" "sso" {
 POLICY
 }
 
+resource "aws_iam_role_policy" "scout" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  name    = "${var.project}-scout-${element(split(",", var.environments), count.index)}-${var.aws_region}"
+  role    = "${element(aws_iam_role.sso.*.id, count.index)}"
+  policy  = "${file("${path.module}/Scout2-Default.json")}"
+}
+
 resource "aws_launch_configuration" "sso" {
   count = "${var.enabled * length(split(",", var.environments))}"
 
@@ -164,7 +176,7 @@ resource "aws_launch_configuration" "sso" {
   }
 
   name_prefix = "${var.project}-${element(split(",",var.environments), count.index)}-${var.aws_region}-"
-  
+
   image_id = "${module.sso-image.image_id}"
 
   instance_type        = "t2.small"
@@ -172,7 +184,7 @@ resource "aws_launch_configuration" "sso" {
   iam_instance_profile = "${element(aws_iam_instance_profile.sso.*.name, count.index)}"
 
   enable_monitoring    = false
-  
+
   associate_public_ip_address = true
 
   root_block_device = {
