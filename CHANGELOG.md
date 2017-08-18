@@ -1,12 +1,36 @@
 # Change Log
 
+## [v1.5.1](https://github.com/nubisproject/nubis-sso/tree/v1.5.1) (2017-08-18)
+[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v1.5.0...v1.5.1)
+
+**Closed issues:**
+
+- \[scout\] Cleanup logic [\#20](https://github.com/nubisproject/nubis-sso/issues/20)
+- \[scout\] Missing IAM permission elasticache:DescribeCacheSubnetGroups [\#19](https://github.com/nubisproject/nubis-sso/issues/19)
+- \[traefik\] Upgrade to v1.3.5 [\#18](https://github.com/nubisproject/nubis-sso/issues/18)
+- Fix Scout navigation header [\#16](https://github.com/nubisproject/nubis-sso/issues/16)
+- Use service-discovery for admin endpoints [\#13](https://github.com/nubisproject/nubis-sso/issues/13)
+- \[traefik\] Upgrade to 1.3.5 [\#6](https://github.com/nubisproject/nubis-sso/issues/6)
+
+**Merged pull requests:**
+
+- Added missing iam permission for scout [\#24](https://github.com/nubisproject/nubis-sso/pull/24) ([limed](https://github.com/limed))
+- Use service-discovery for application administrative endpoints [\#22](https://github.com/nubisproject/nubis-sso/pull/22) ([gozer](https://github.com/gozer))
+- Bake the required symlink in the image so we need to manage it only once [\#21](https://github.com/nubisproject/nubis-sso/pull/21) ([gozer](https://github.com/gozer))
+- Rename Scout header and move it so its always presented [\#17](https://github.com/nubisproject/nubis-sso/pull/17) ([gozer](https://github.com/gozer))
+- Upgrade Traefik to 1.3.5 [\#12](https://github.com/nubisproject/nubis-sso/pull/12) ([gozer](https://github.com/gozer))
+- Build scout dashboard [\#10](https://github.com/nubisproject/nubis-sso/pull/10) ([limed](https://github.com/limed))
+
 ## [v1.5.0](https://github.com/nubisproject/nubis-sso/tree/v1.5.0) (2017-06-24)
 **Closed issues:**
 
 - Use usergroups/sudogroup to configure ACLs [\#1](https://github.com/nubisproject/nubis-sso/issues/1)
+- Tag v1.5.0 release [\#3](https://github.com/nubisproject/nubis-sso/issues/3)
 
 **Merged pull requests:**
 
+- Merge v1.5.0 release into develop. \[skip ci\] [\#5](https://github.com/nubisproject/nubis-sso/pull/5) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.5.0 release \[skip ci\] [\#4](https://github.com/nubisproject/nubis-sso/pull/4) ([tinnightcap](https://github.com/tinnightcap))
 - Fix ACL access [\#2](https://github.com/nubisproject/nubis-sso/pull/2) ([gozer](https://github.com/gozer))
 
 
