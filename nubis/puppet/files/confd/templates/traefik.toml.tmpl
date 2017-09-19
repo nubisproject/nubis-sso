@@ -12,6 +12,7 @@ defaultEntryPoints = ["http","https"]
 
 [web]
 address = ":8082"
+    [web.metrics.prometheus]
 
 [consul]
 endpoint = "127.0.0.1:8500"
