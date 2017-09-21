@@ -1,4 +1,9 @@
 #!/bin/bash -l
 
+# Sleep for a random amount of time within 10 minutes
+# Startups are rough and we should make it sleep for a bit to let
+# the host settle down before running Scout
+sleep $(( $RANDOM % 600 ))
+
 nice -n 19 /usr/local/bin/Scout2 --force --no-browser  --report-dir /var/www/html/scout --ruleset /usr/local/bin/nubis-scout-ruleset.json &
 disown
