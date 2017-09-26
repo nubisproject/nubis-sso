@@ -700,7 +700,7 @@
         {
             "level": "warning",
             "filename": "rds-instance-storage-not-encrypted.json",
-            "enabled": true
+            "enabled": false
         },
         {
             "level": "danger",
