@@ -77,9 +77,10 @@ apache::vhost { $project_name:
     access_log_env_var => '!internal',
     access_log_format  => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"',
 
-    aliases => [
-      { scriptalias      => '/aws',
-        path             => '/var/www/html/aws.py',
+    aliases            => [
+      {
+        'scriptalias' => '/aws',
+        'path'        => '/var/www/html/aws.py',
       },
     ],
 
@@ -205,7 +206,6 @@ OIDCSessionInactivityTimeout 43200
       "set X-SSO-Nubis-Build   ${packer_build_name}",
     ],
 }
-
 
 staging::file { '/usr/local/bin/asg-route53':
   source => "https://github.com/gozer/asg-route53/releases/download/${asg_route53_version}/asg-route53.${asg_route53_version}-linux_amd64",
