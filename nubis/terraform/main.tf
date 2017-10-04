@@ -429,7 +429,6 @@ resource "aws_iam_policy" "readonly" {
     "Statement": [
         {
             "Action": [
-        
                 "autoscaling:Describe*",
                 "cloudformation:Describe*",
                 "cloudformation:Get*",
