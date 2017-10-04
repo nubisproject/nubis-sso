@@ -29,11 +29,11 @@ else
   consulate kv rm "$KV_PREFIX/OpenID/Client/Secret"
 fi
 
-IAM_CLIENT_SECRET=$(nubis-secret get iam/client_id 2>/dev/null)
-if [ ! -z "$IAM_CLIENT_SECRET" ]; then
-  consulate kv set "$KV_PREFIX/IAM/Client/Secret" "$IAM_CLIENT_SECRET"
+IAM_CLIENT_ID=$(nubis-secret get iam/client_id 2>/dev/null)
+if [ ! -z "$IAM_CLIENT_ID" ]; then
+  consulate kv set "$KV_PREFIX/IAM/Client/Id" "$IAM_CLIENT_ID"
 else
-  consulate kv rm "$KV_PREFIX/IAM/Client/Secret"
+  consulate kv rm "$KV_PREFIX/IAM/Client/Id"
 fi
 
 IAM_CLIENT_SECRET=$(nubis-secret get iam/client_secret 2>/dev/null)
