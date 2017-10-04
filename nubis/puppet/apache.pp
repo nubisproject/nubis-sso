@@ -79,9 +79,7 @@ apache::vhost { $project_name:
 
     aliases => [
       { scriptalias      => '/aws',
-        path             => '/var/www/html/aws.py
-	
-	',
+        path             => '/var/www/html/aws.py',
       },
     ],
 
@@ -259,7 +257,7 @@ file { '/var/www/.aws':
   group  => $::apache::params::group,
   require => [
     Class['nubis_apache'],
-  ] 
+  ]
 }
 
 file { '/var/www/html/aws.py':
@@ -273,7 +271,7 @@ file { '/var/www/html/aws.py':
   source  => 'puppet:///nubis/files/aws',
 }
 
-#[www-data@nubis-gozer/us-west-2/core.sso ~]$ cat /var/www/.aws/credentials 
+# cat /var/www/.aws/credentials 
 #[default]
 #aws_access_key_id = AKIAJVWFVK3CUFE3SP7A
 #aws_secret_access_key = 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
