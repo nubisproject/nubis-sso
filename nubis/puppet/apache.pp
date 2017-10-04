@@ -145,9 +145,9 @@ apache::vhost { $project_name:
 ',
       },
       {
-        'path'            => '/aws',
-        'provider'        => 'location',
-        'require'         => 'unmanaged',
+        'path'     => '/aws',
+        'provider' => 'location',
+        'require'  => 'unmanaged',
       },
       {
         'path'            => '/prometheus',
@@ -252,9 +252,9 @@ python::pip { 'boto':
 }
 
 file { '/var/www/.aws':
-  ensure => directory,
-  owner  => $::apache::params::user,
-  group  => $::apache::params::group,
+  ensure  => directory,
+  owner   => $::apache::params::user,
+  group   => $::apache::params::group,
   require => [
     Class['nubis_apache'],
   ]
