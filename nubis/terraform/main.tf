@@ -418,8 +418,6 @@ resource "aws_iam_role" "readonly" {
 EOF
 }
 
-
-
 resource "aws_iam_policy" "readonly" {
     count       = "${var.enabled}"
     name        = "readonly-${var.aws_region}"
