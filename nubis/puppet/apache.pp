@@ -273,5 +273,5 @@ file { '/var/www/html/aws.py':
 
 # cat /var/www/.aws/credentials 
 #[default]
-#aws_access_key_id = AKIAJVWFVK3CUFE3SP7A
-#aws_secret_access_key = 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
+#aws_access_key_id = XXXX
+#aws_secret_access_key = YYYY
