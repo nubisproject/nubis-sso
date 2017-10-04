@@ -176,7 +176,7 @@ resource "aws_launch_configuration" "sso" {
 
   image_id = "${module.sso-image.image_id}"
 
-  instance_type        = "t2.medium"
+  instance_type        = "t2.small"
   key_name             = "${var.key_name}"
   iam_instance_profile = "${element(aws_iam_instance_profile.sso.*.name, count.index)}"
 
