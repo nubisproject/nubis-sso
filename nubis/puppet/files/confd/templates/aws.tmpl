@@ -4,4 +4,5 @@ aws_secret_access_key = {{ getv "/config/IAM/Client/Secret" }}
 
 [profile readonly]
 role_arn={{ getv "/config/IAM/Client/Role" }}
+role_session_name=sso
 source_profile=default
