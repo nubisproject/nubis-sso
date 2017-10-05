@@ -1,4 +1,4 @@
-$traefik_version = '1.3.5'
+$traefik_version = '1.3.8'
 $traefik_url = "https://github.com/containous/traefik/releases/download/v${traefik_version}/traefik_linux-amd64"
 
 notice ("Grabbing traefik ${traefik_version}")
@@ -35,14 +35,7 @@ upstart::job { 'traefik':
     },
     user           => 'root',
     group          => 'root',
-    script         => '
-  if [ -r /etc/profile.d/proxy.sh ]; then
-    echo "Loading Proxy settings"
-    . /etc/profile.d/proxy.sh
-  fi
-
-  exec /usr/local/bin/traefik --web.readonly=true --loglevel=INFO
-',
+    script         => 'exec /usr/local/bin/traefik --web.readonly=true --loglevel=INFO',
     post_stop      => '
 goal=$(initctl status $UPSTART_JOB | awk \'{print $2}\' | cut -d \'/\' -f 1)
 if [ $goal != "stop" ]; then
@@ -57,10 +50,10 @@ fi
 ',
 }
 
-file { '/etc/consul/svc-sso-traefik.json':
+file { '/etc/consul/svc-traefik.json':
   ensure => file,
   owner  => root,
   group  => root,
   mode   => '0644',
-  source => 'puppet:///nubis/files/svc-sso-traefik.json',
+  source => 'puppet:///nubis/files/svc-traefik.json',
 }

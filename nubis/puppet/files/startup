@@ -1,18 +1,18 @@
 #!/bin/bash
 
-NUBIS_ENVIRONMENT=$(nubis-metadata NUBIS_ENVIRONMENT)
+NUBIS_ARENA=$(nubis-metadata NUBIS_ARENA)
 NUBIS_PROJECT=$(nubis-metadata NUBIS_PROJECT)
 NUBIS_ACCOUNT=$(nubis-metadata NUBIS_ACCOUNT)
 NUBIS_DOMAIN=$(nubis-metadata NUBIS_DOMAIN)
 NUBIS_SSO_ZONEID=$(nubis-metadata NUBIS_SSO_ZONEID)
 NUBIS_REGION=$(nubis-region)
 
-KV_PREFIX="nubis/$NUBIS_PROJECT/$NUBIS_ENVIRONMENT/config"
+KV_PREFIX="nubis/$NUBIS_PROJECT/$NUBIS_ARENA/config"
 
 echo "Setting KV previx to $KV_PREFIX"
 
 consulate kv set "$KV_PREFIX/Project" "$NUBIS_PROJECT"
-consulate kv set "$KV_PREFIX/Environment" "$NUBIS_ENVIRONMENT"
+consulate kv set "$KV_PREFIX/Arena"   "$NUBIS_ARENA"
 consulate kv set "$KV_PREFIX/Account" "$NUBIS_ACCOUNT"
 
 OPENID_CLIENT_ID=$(nubis-secret get openid/client_id 2>/dev/null)
@@ -27,6 +27,27 @@ if [ ! -z "$OPENID_CLIENT_SECRET" ]; then
   consulate kv set "$KV_PREFIX/OpenID/Client/Secret" "$OPENID_CLIENT_SECRET"
 else
   consulate kv rm "$KV_PREFIX/OpenID/Client/Secret"
+fi
+
+IAM_CLIENT_ID=$(nubis-secret get iam/client_id 2>/dev/null)
+if [ ! -z "$IAM_CLIENT_ID" ]; then
+  consulate kv set "$KV_PREFIX/IAM/Client/Id" "$IAM_CLIENT_ID"
+else
+  consulate kv rm "$KV_PREFIX/IAM/Client/Id"
+fi
+
+IAM_CLIENT_SECRET=$(nubis-secret get iam/client_secret 2>/dev/null)
+if [ ! -z "$IAM_CLIENT_SECRET" ]; then
+  consulate kv set "$KV_PREFIX/IAM/Client/Secret" "$IAM_CLIENT_SECRET"
+else
+  consulate kv rm "$KV_PREFIX/IAM/Client/Secret"
+fi
+
+IAM_CLIENT_ROLE=$(nubis-metadata NUBIS_SSO_READONLY_ROLE)
+if [ ! -z "$IAM_CLIENT_ROLE" ]; then
+  consulate kv set "$KV_PREFIX/IAM/Client/Role" "$IAM_CLIENT_ROLE"
+else
+  consulate kv rm "$KV_PREFIX/IAM/Client/Role"
 fi
 
 NUBIS_SSO_OPENID_DOMAIN=$(nubis-metadata NUBIS_SSO_OPENID_DOMAIN)
@@ -57,7 +78,7 @@ else
   consulate kv rm "$KV_PREFIX/SudoGroups"
 fi
 
-DNS_ENDPOINT="$NUBIS_PROJECT.$NUBIS_ENVIRONMENT.$NUBIS_REGION.$NUBIS_ACCOUNT.$NUBIS_DOMAIN"
+DNS_ENDPOINT="$NUBIS_PROJECT.$NUBIS_ARENA.$NUBIS_REGION.$NUBIS_ACCOUNT.$NUBIS_DOMAIN"
 consulate kv set "$KV_PREFIX/Domain" "$DNS_ENDPOINT"
 
 echo "Registering ourselves in DNS for $DNS_ENDPOINT"

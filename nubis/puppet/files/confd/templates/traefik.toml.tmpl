@@ -1,4 +1,7 @@
 defaultEntryPoints = ["http","https"]
+
+checkNewVersion = false
+
 [entryPoints]
   [entryPoints.http]
     address = ":80"
@@ -11,17 +14,19 @@ defaultEntryPoints = ["http","https"]
     [entryPoints.https.tls]
 
 [web]
-address = ":8082"
+address = ":9109"
+
+[web.metrics.prometheus]
 
 [consul]
 endpoint = "127.0.0.1:8500"
 watch = true
-prefix = "nubis/{{ getv "/config/Project" }}/{{ getv "/config/Environment" }}/traefik/config"
+prefix = "nubis/{{ getv "/config/Project" }}/{{ getv "/config/Arena" }}/traefik/config"
 
 [acme]
 # Handle when this isn't set
 email="nubis-team@mozilla.com"
-storage = "nubis/{{ getv "/config/Project" }}/{{ getv "/config/Environment" }}/traefik/acme"
+storage = "nubis/{{ getv "/config/Project" }}/{{ getv "/config/Arena" }}/traefik/acme"
 entryPoint = "https"
 
 # Disable for prod

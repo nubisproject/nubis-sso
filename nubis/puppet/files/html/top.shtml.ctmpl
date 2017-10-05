@@ -2,16 +2,17 @@
 <head></head>
 <body>
 <img align="middle" height=54 width=54 src="https://avatars2.githubusercontent.com/u/11081104?v=3">
-<b><a target="_top" href=/>[<!--#echo var="NUBIS_ACCOUNT" -->][<!--#echo var="NUBIS_ENVIRONMENT" -->]</a></b>
+<b><a target="_top" href=/>[<!--#echo var="NUBIS_ACCOUNT" -->][<!--#echo var="NUBIS_ARENA" -->]</a></b>
 <a target="middle" href=/consul/ui/>[Key-Value]</a></li>
 <a target="middle" href=/prometheus/graph>[Monitoring]</a></li>
 <a target="middle" href=/alertmanager>[Alerting]</a></li>
 <a target="middle" href=/grafana/>[Graphs]</a></li>
 <a target="middle" href=/kibana/app/kibana>[Logs]</a></li>
+<a target="_blank" href=/aws>[AWS]</a></li>
 <a target="middle" href=/scout/>[Security-Beta]</a></li>
-<!--#if expr='v("NUBIS_ENVIRONMENT") = "admin"' -->
+{{ if service "jenkins" -}}
 <a target="middle" href=/jenkins/>[Pipeline]</a></li>
-<!--#endif -->
+{{ end -}}
 {{range services}}
   {{ if .Tags | contains "sso=true" }}|{{range service .Name }}
     <a target="middle" href=/admin/{{.Name}}/>[{{.Name}}]</a></li>
