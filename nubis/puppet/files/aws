@@ -6,7 +6,7 @@ import cgitb; cgitb.enable()  # for troubleshooting
 import urllib, json
 import requests
 
-from boto.sts import STSConnection # AWS SDK for Python (Boto) 'pip install boto'
+import boto3
 
 # Step 1: Authenticate user in your own identity system.
 user = os.environ['REMOTE_USER']
@@ -20,12 +20,21 @@ user = os.environ['REMOTE_USER']
 # or in a configuration file, and will be discovered automatically by the 
 # STSConnection() function. For more information, see the Python SDK docs:
 # http://boto.readthedocs.org/en/latest/boto_config_tut.html
-sts_connection = STSConnection()
+s = boto3.Session(profile_name='readonly')
 
-assumed_role_object = sts_connection.assume_role(
-    role_arn="arn:aws:iam::602876482920:role/nubis/sso/readonly-us-west-2",
-    role_session_name=user
-)
+c = s.get_credentials()
+
+access_key = c.access_key
+secret_key = c.secret_key
+session_token = c.token
+
+# Step 3: Format resulting temporary credentials into JSON
+json_string_with_temp_credentials = '{'
+json_string_with_temp_credentials += '"sessionId":"' + access_key + '",'
+json_string_with_temp_credentials += '"sessionKey":"' + secret_key + '",'
+json_string_with_temp_credentials += '"sessionToken":"' + session_token + '"'
+json_string_with_temp_credentials += '}'
+
 
 # Step 3: Format resulting temporary credentials into JSON
 json_string_with_temp_credentials = '{'
