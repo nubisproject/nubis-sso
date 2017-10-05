@@ -35,14 +35,6 @@ json_string_with_temp_credentials += '"sessionKey":"' + secret_key + '",'
 json_string_with_temp_credentials += '"sessionToken":"' + session_token + '"'
 json_string_with_temp_credentials += '}'
 
-
-# Step 3: Format resulting temporary credentials into JSON
-json_string_with_temp_credentials = '{'
-json_string_with_temp_credentials += '"sessionId":"' + assumed_role_object.credentials.access_key + '",'
-json_string_with_temp_credentials += '"sessionKey":"' + assumed_role_object.credentials.secret_key + '",'
-json_string_with_temp_credentials += '"sessionToken":"' + assumed_role_object.credentials.session_token + '"'
-json_string_with_temp_credentials += '}'
-
 # Step 4. Make request to AWS federation endpoint to get sign-in token. Construct the parameter string with
 # the sign-in action request, a 12-hour session duration, and the JSON document with temporary credentials 
 # as parameters.
