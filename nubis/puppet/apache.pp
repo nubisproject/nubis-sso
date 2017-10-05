@@ -270,8 +270,3 @@ file { '/var/www/html/aws.py':
   ],
   source  => 'puppet:///nubis/files/aws',
 }
-
-# cat /var/www/.aws/credentials 
-#[default]
-#aws_access_key_id = XXXX
-#aws_secret_access_key = YYYY

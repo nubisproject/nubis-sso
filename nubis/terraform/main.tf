@@ -201,6 +201,7 @@ resource "aws_launch_configuration" "sso" {
 NUBIS_PROJECT="${var.project}"
 NUBIS_ARENA="${element(var.arenas, count.index)}"
 NUBIS_ACCOUNT="${var.service_name}"
+NUBIS_SSO_READONLY_ROLE="${aws_iam_role.readonly.arn}"
 NUBIS_TECHNICAL_CONTACT="${var.technical_contact}"
 NUBIS_DOMAIN="${var.nubis_domain}"
 NUBIS_SUDO_GROUPS="${var.nubis_sudo_groups}"

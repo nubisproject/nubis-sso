@@ -43,6 +43,13 @@ else
   consulate kv rm "$KV_PREFIX/IAM/Client/Secret"
 fi
 
+IAM_CLIENT_ROLE=$(nubis-metadata NUBIS_SSO_READONLY_ROLE)
+if [ ! -z "$IAM_CLIENT_ROLE" ]; then
+  consulate kv set "$KV_PREFIX/IAM/Client/Role" "$IAM_CLIENT_ROLE"
+else
+  consulate kv rm "$KV_PREFIX/IAM/Client/Role"
+fi
+
 NUBIS_SSO_OPENID_DOMAIN=$(nubis-metadata NUBIS_SSO_OPENID_DOMAIN)
 if [ ! -z "$NUBIS_SSO_OPENID_DOMAIN" ]; then
   consulate kv set "$KV_PREFIX/OpenID/Client/Domain" "$NUBIS_SSO_OPENID_DOMAIN"
