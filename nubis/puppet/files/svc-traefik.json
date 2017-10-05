@@ -1,6 +1,7 @@
 {
   "service": {
-    "name": "sso-traefik",
+    "name": "traefik",
+    "tags": [ "sso", "%%ARENA%%" ],
     "port": 9109,
     "check": {
        "http": "http://localhost:9109/health",

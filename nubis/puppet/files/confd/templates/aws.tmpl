@@ -1,0 +1,7 @@
+[default]
+aws_access_key_id = {{ getv "/config/IAM/Client/Id" }}
+aws_secret_access_key = {{ getv "/config/IAM/Client/Secret" }}
+
+[profile readonly]
+role_arn={{ getv "/config/IAM/Client/Role" }}
+source_profile=default

@@ -1,0 +1,13 @@
+[template]
+src = "aws.tmpl"
+dest = "/var/www/.aws/config"
+prefix = "/nubis/%%PROJECT%%/%%ARENA%%"
+
+uid = 33
+gid = 33
+mode = "0640"
+
+keys = [
+    "/config/*",
+    "/config"
+]

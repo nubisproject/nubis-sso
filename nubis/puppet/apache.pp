@@ -18,6 +18,16 @@ class { 'apache::mod::include': }
 apache::mod { 'sed': }
 apache::mod { 'macro': }
 
+file { '/var/www/html/favicon.ico':
+  ensure  => present,
+  owner   => 'root',
+  group   => 'root',
+  require => [
+    Class['Nubis_apache'],
+  ],
+  source  => 'puppet:///nubis/files/html/favicon.ico',
+}
+
 file { '/var/www/html/index.html':
   ensure  => present,
   owner   => 'root',
@@ -66,6 +76,13 @@ apache::vhost { $project_name:
     ],
     access_log_env_var => '!internal',
     access_log_format  => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"',
+
+    aliases            => [
+      {
+        'scriptalias' => '/aws',
+        'path'        => '/var/www/html/aws.py',
+      },
+    ],
 
     directories        => [
       {
@@ -128,6 +145,11 @@ apache::vhost { $project_name:
 ',
       },
       {
+        'path'     => '/aws',
+        'provider' => 'location',
+        'require'  => 'unmanaged',
+      },
+      {
         'path'            => '/prometheus',
         'provider'        => 'location',
         'require'         => 'unmanaged',
@@ -177,8 +199,6 @@ OIDCOAuthTokenIntrospectionInterval 15
 OIDCUserInfoRefreshInterval 15
 OIDCSessionMaxDuration 0
 OIDCSessionInactivityTimeout 43200
-
-ServerName sso.stage.us-west-2.nubis-gozer.nubis.allizom.org
 ",
     headers            => [
       "set X-SSO-Nubis-Version ${project_version}",
@@ -186,7 +206,6 @@ ServerName sso.stage.us-west-2.nubis-gozer.nubis.allizom.org
       "set X-SSO-Nubis-Build   ${packer_build_name}",
     ],
 }
-
 
 staging::file { '/usr/local/bin/asg-route53':
   source => "https://github.com/gozer/asg-route53/releases/download/${asg_route53_version}/asg-route53.${asg_route53_version}-linux_amd64",
@@ -227,3 +246,27 @@ package { 'mod_auth_openidc':
   ]
 }->
 apache::mod { 'auth_openidc': }
+
+python::pip { 'boto':
+  ensure =>  '2.48.0'
+}
+
+file { '/var/www/.aws':
+  ensure  => directory,
+  owner   => $::apache::params::user,
+  group   => $::apache::params::group,
+  require => [
+    Class['nubis_apache'],
+  ]
+}
+
+file { '/var/www/html/aws.py':
+  ensure  => present,
+  owner   => 'root',
+  group   => 'root',
+  mode    => '0755',
+  require => [
+    Class['Nubis_apache'],
+  ],
+  source  => 'puppet:///nubis/files/aws',
+}
