@@ -1,5 +1,33 @@
 # Change Log
 
+## [v2.0.0](https://github.com/nubisproject/nubis-sso/tree/v2.0.0) (2017-10-05)
+[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v1.5.1...v2.0.0)
+
+**Implemented enhancements:**
+
+- \[traefik\] Upgrade to v1.3.8 [\#32](https://github.com/nubisproject/nubis-sso/issues/32)
+- Use nubis-terraform sso-image search module [\#25](https://github.com/nubisproject/nubis-sso/issues/25)
+- Upgrade traefik [\#36](https://github.com/nubisproject/nubis-sso/pull/36) ([limed](https://github.com/limed))
+
+**Closed issues:**
+
+- \[traefik\] Switch traefik port to somewhere in the 9100-9110 range [\#38](https://github.com/nubisproject/nubis-sso/issues/38)
+- Enable prometheus metrics endpoint [\#30](https://github.com/nubisproject/nubis-sso/issues/30)
+- \[scout\] Add a random sleep for run-scout [\#26](https://github.com/nubisproject/nubis-sso/issues/26)
+- Build scout dashboard [\#11](https://github.com/nubisproject/nubis-sso/issues/11)
+- Reloading nubis admin/sso dashboard fails with various SSO-related errors [\#9](https://github.com/nubisproject/nubis-sso/issues/9)
+
+**Merged pull requests:**
+
+- AWS fixups [\#43](https://github.com/nubisproject/nubis-sso/pull/43) ([gozer](https://github.com/gozer))
+- Arena work [\#42](https://github.com/nubisproject/nubis-sso/pull/42) ([gozer](https://github.com/gozer))
+- Sleep scout before running [\#41](https://github.com/nubisproject/nubis-sso/pull/41) ([limed](https://github.com/limed))
+- Move traefik metrics to port 9109 [\#40](https://github.com/nubisproject/nubis-sso/pull/40) ([limed](https://github.com/limed))
+- Update to nubis-travis v1.4.2 [\#39](https://github.com/nubisproject/nubis-sso/pull/39) ([tinnightcap](https://github.com/tinnightcap))
+- Update nubis-travis to v1.4.0 [\#35](https://github.com/nubisproject/nubis-sso/pull/35) ([tinnightcap](https://github.com/tinnightcap))
+- Migrate to mozilla slack [\#34](https://github.com/nubisproject/nubis-sso/pull/34) ([tinnightcap](https://github.com/tinnightcap))
+- Use nubis-terraform sso image search [\#33](https://github.com/nubisproject/nubis-sso/pull/33) ([limed](https://github.com/limed))
+
 ## [v1.5.1](https://github.com/nubisproject/nubis-sso/tree/v1.5.1) (2017-08-18)
 [Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v1.5.0...v1.5.1)
 
@@ -11,9 +39,12 @@
 - Fix Scout navigation header [\#16](https://github.com/nubisproject/nubis-sso/issues/16)
 - Use service-discovery for admin endpoints [\#13](https://github.com/nubisproject/nubis-sso/issues/13)
 - \[traefik\] Upgrade to 1.3.5 [\#6](https://github.com/nubisproject/nubis-sso/issues/6)
+- Tag v1.5.1 release [\#27](https://github.com/nubisproject/nubis-sso/issues/27)
 
 **Merged pull requests:**
 
+- Merge v1.5.1 release into develop. \[skip ci\] [\#29](https://github.com/nubisproject/nubis-sso/pull/29) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.5.1 release \[skip ci\] [\#28](https://github.com/nubisproject/nubis-sso/pull/28) ([tinnightcap](https://github.com/tinnightcap))
 - Added missing iam permission for scout [\#24](https://github.com/nubisproject/nubis-sso/pull/24) ([limed](https://github.com/limed))
 - Use service-discovery for application administrative endpoints [\#22](https://github.com/nubisproject/nubis-sso/pull/22) ([gozer](https://github.com/gozer))
 - Bake the required symlink in the image so we need to manage it only once [\#21](https://github.com/nubisproject/nubis-sso/pull/21) ([gozer](https://github.com/gozer))
