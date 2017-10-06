@@ -1,17 +1,6 @@
 # Change Log
 
 ## [v2.0.0](https://github.com/nubisproject/nubis-sso/tree/v2.0.0) (2017-10-06)
-[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.0.0...v2.0.0)
-
-**Closed issues:**
-
-- \[unicreds\] Cleanup resources on destruction [\#47](https://github.com/nubisproject/nubis-sso/issues/47)
-
-**Merged pull requests:**
-
-- Cleanup unicreds secrets [\#48](https://github.com/nubisproject/nubis-sso/pull/48) ([gozer](https://github.com/gozer))
-
-## [v2.0.0](https://github.com/nubisproject/nubis-sso/tree/v2.0.0) (2017-10-05)
 [Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v1.5.1...v2.0.0)
 
 **Implemented enhancements:**
@@ -22,15 +11,20 @@
 
 **Closed issues:**
 
+- \[unicreds\] Cleanup resources on destruction [\#47](https://github.com/nubisproject/nubis-sso/issues/47)
 - \[traefik\] Switch traefik port to somewhere in the 9100-9110 range [\#38](https://github.com/nubisproject/nubis-sso/issues/38)
 - Enable prometheus metrics endpoint [\#30](https://github.com/nubisproject/nubis-sso/issues/30)
 - \[scout\] Add a random sleep for run-scout [\#26](https://github.com/nubisproject/nubis-sso/issues/26)
 - Build scout dashboard [\#11](https://github.com/nubisproject/nubis-sso/issues/11)
 - Reloading nubis admin/sso dashboard fails with various SSO-related errors [\#9](https://github.com/nubisproject/nubis-sso/issues/9)
+- Tag v2.0.0 release [\#49](https://github.com/nubisproject/nubis-sso/issues/49)
 - Tag v2.0.0 release [\#44](https://github.com/nubisproject/nubis-sso/issues/44)
 
 **Merged pull requests:**
 
+- Merge v2.0.0 release into develop. \[skip ci\] [\#51](https://github.com/nubisproject/nubis-sso/pull/51) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v2.0.0 release \[skip ci\] [\#50](https://github.com/nubisproject/nubis-sso/pull/50) ([tinnightcap](https://github.com/tinnightcap))
+- Cleanup unicreds secrets [\#48](https://github.com/nubisproject/nubis-sso/pull/48) ([gozer](https://github.com/gozer))
 - Merge v2.0.0 release into develop. \[skip ci\] [\#46](https://github.com/nubisproject/nubis-sso/pull/46) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v2.0.0 release \[skip ci\] [\#45](https://github.com/nubisproject/nubis-sso/pull/45) ([tinnightcap](https://github.com/tinnightcap))
 - AWS fixups [\#43](https://github.com/nubisproject/nubis-sso/pull/43) ([gozer](https://github.com/gozer))
