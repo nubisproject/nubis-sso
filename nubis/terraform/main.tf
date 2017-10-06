@@ -286,6 +286,7 @@ resource "null_resource" "secrets" {
     version       = "${var.nubis_version}"
     context       = "-E region:${var.aws_region} -E arena:${element(var.arenas, count.index)} -E service:${var.project}"
     unicreds      = "unicreds -r ${var.aws_region} put -k ${var.credstash_key} ${var.project}/${element(var.arenas, count.index)}"
+    unicreds_rm   = "unicreds -r ${var.aws_region} delete -k ${var.credstash_key} ${var.project}/${element(var.arenas, count.index)}"
     unicreds_file = "unicreds -r ${var.aws_region} put-file -k ${var.credstash_key} ${var.project}/${element(var.arenas, count.index)}"
   }
 
@@ -294,7 +295,17 @@ resource "null_resource" "secrets" {
   }
 
   provisioner "local-exec" {
+    when    = "destroy"
+    command = "${self.triggers.unicreds_rm}/openid/client_id"
+  }
+
+  provisioner "local-exec" {
     command = "${self.triggers.unicreds}/openid/client_secret ${var.openid_client_secret} ${self.triggers.context}"
+  }
+
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "${self.triggers.unicreds_rm}/openid/client_secret"
   }
 
   provisioner "local-exec" {
@@ -302,7 +313,17 @@ resource "null_resource" "secrets" {
   }
 
   provisioner "local-exec" {
+    when    = "destroy"
+    command = "${self.triggers.unicreds_rm}/iam/client_id"
+  }
+
+  provisioner "local-exec" {
     command = "${self.triggers.unicreds}/iam/client_secret ${aws_iam_access_key.sso.secret} ${self.triggers.context}"
+  }
+
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "${self.triggers.unicreds_rm}/iam/client_secret"
   }
 
 }
