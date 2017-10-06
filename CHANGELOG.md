@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.0.0](https://github.com/nubisproject/nubis-sso/tree/v2.0.0) (2017-10-06)
+[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.0.0...v2.0.0)
+
+**Closed issues:**
+
+- \[unicreds\] Cleanup resources on destruction [\#47](https://github.com/nubisproject/nubis-sso/issues/47)
+
+**Merged pull requests:**
+
+- Cleanup unicreds secrets [\#48](https://github.com/nubisproject/nubis-sso/pull/48) ([gozer](https://github.com/gozer))
+
 ## [v2.0.0](https://github.com/nubisproject/nubis-sso/tree/v2.0.0) (2017-10-05)
 [Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v1.5.1...v2.0.0)
 
@@ -16,9 +27,12 @@
 - \[scout\] Add a random sleep for run-scout [\#26](https://github.com/nubisproject/nubis-sso/issues/26)
 - Build scout dashboard [\#11](https://github.com/nubisproject/nubis-sso/issues/11)
 - Reloading nubis admin/sso dashboard fails with various SSO-related errors [\#9](https://github.com/nubisproject/nubis-sso/issues/9)
+- Tag v2.0.0 release [\#44](https://github.com/nubisproject/nubis-sso/issues/44)
 
 **Merged pull requests:**
 
+- Merge v2.0.0 release into develop. \[skip ci\] [\#46](https://github.com/nubisproject/nubis-sso/pull/46) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v2.0.0 release \[skip ci\] [\#45](https://github.com/nubisproject/nubis-sso/pull/45) ([tinnightcap](https://github.com/tinnightcap))
 - AWS fixups [\#43](https://github.com/nubisproject/nubis-sso/pull/43) ([gozer](https://github.com/gozer))
 - Arena work [\#42](https://github.com/nubisproject/nubis-sso/pull/42) ([gozer](https://github.com/gozer))
 - Sleep scout before running [\#41](https://github.com/nubisproject/nubis-sso/pull/41) ([limed](https://github.com/limed))
