@@ -16,6 +16,10 @@ checkNewVersion = false
 [web]
 address = ":9109"
 
+[accessLog]
+filePath = "/var/log/traefik.log"
+format = "json"
+
 [web.metrics.prometheus]
 
 [consul]

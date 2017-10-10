@@ -19,6 +19,14 @@ file { '/etc/traefik':
   mode   => '0640',
 }
 
+file { '/etc/logrotate.d/traefik':
+  ensure => file,
+  owner  => root,
+  group  => root,
+  mode   => '0644',
+  source => 'puppet:///nubis/files/traefik.logrotate',
+}
+
 upstart::job { 'traefik':
     description    => 'Traefik Load Balancer',
     service_ensure => 'stopped',
