@@ -45,9 +45,9 @@ file { '/etc/nubis.d/zzz-run-scout':
 }
 
 # Run scout once a day
-file { '/etc/cron.daily/run-scout':
-  ensure  => link,
-  target  => '/usr/local/bin/run-scout',
-  require =>  File['/usr/local/bin/run-scout'],
+cron::daily { 'run-scout':
+  ensure  => present,
+  user    =>  'root',
+  command => 'nubis-cron run-scout /usr/local/bin/run-scout',
 }
 
