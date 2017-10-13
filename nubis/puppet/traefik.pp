@@ -1,4 +1,4 @@
-$traefik_version = '1.3.8'
+$traefik_version = '1.4.0-rc4'
 $traefik_url = "https://github.com/containous/traefik/releases/download/v${traefik_version}/traefik_linux-amd64"
 
 notice ("Grabbing traefik ${traefik_version}")
@@ -17,6 +17,14 @@ file { '/etc/traefik':
   owner  => root,
   group  => root,
   mode   => '0640',
+}
+
+file { '/etc/logrotate.d/traefik':
+  ensure => file,
+  owner  => root,
+  group  => root,
+  mode   => '0644',
+  source => 'puppet:///nubis/files/traefik.logrotate',
 }
 
 upstart::job { 'traefik':
