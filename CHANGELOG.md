@@ -12,6 +12,7 @@
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.0.1 release \[skip ci\] [\#61](https://github.com/nubisproject/nubis-sso/pull/61) ([tinnightcap](https://github.com/tinnightcap))
 - Nubis cron for scout [\#58](https://github.com/nubisproject/nubis-sso/pull/58) ([limed](https://github.com/limed))
 - Enable Traefik access logs [\#57](https://github.com/nubisproject/nubis-sso/pull/57) ([gozer](https://github.com/gozer))
 - Upgrade to Traefik v1.4.0-rc4 [\#56](https://github.com/nubisproject/nubis-sso/pull/56) ([gozer](https://github.com/gozer))
