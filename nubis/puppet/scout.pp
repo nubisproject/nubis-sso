@@ -38,10 +38,10 @@ file { '/usr/local/bin/nubis-scout-ruleset.json':
 }
 
 # This needs to be here so that we can run scout once
-file { '/etc/nubis.d/zzz-run-scout':
-  ensure  => link,
-  target  => '/usr/local/bin/run-scout',
-  require => File['/usr/local/bin/run-scout'],
+cron { 'run-scout-startup':
+  ensure  => 'present',
+  special => 'reboot',
+  command => 'nubis-cron run-scout /usr/local/bin/run-scout',
 }
 
 # Run scout once a day
