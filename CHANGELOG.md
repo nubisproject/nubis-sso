@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.0.2](https://github.com/nubisproject/nubis-sso/tree/v2.0.2) (2017-10-24)
+[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.0.1...v2.0.2)
+
+**Closed issues:**
+
+- Wrap scout invocations with nubis-cron [\#23](https://github.com/nubisproject/nubis-sso/issues/23)
+
+**Merged pull requests:**
+
+- Use nubis-cron during startup to invoke run scout [\#64](https://github.com/nubisproject/nubis-sso/pull/64) ([limed](https://github.com/limed))
+
 ## [v2.0.1](https://github.com/nubisproject/nubis-sso/tree/v2.0.1) (2017-10-13)
 [Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.0.0...v2.0.1)
 
@@ -9,9 +20,12 @@
 - \[traefik\] Enable access logging [\#37](https://github.com/nubisproject/nubis-sso/issues/37)
 - \[traefik\] Make use of the new web prefix option [\#31](https://github.com/nubisproject/nubis-sso/issues/31)
 - Remove hardcoded value [\#7](https://github.com/nubisproject/nubis-sso/issues/7)
+- Tag v2.0.1 release [\#60](https://github.com/nubisproject/nubis-sso/issues/60)
 
 **Merged pull requests:**
 
+- Merge v2.0.1 release into develop. \[skip ci\] [\#63](https://github.com/nubisproject/nubis-sso/pull/63) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v2.0.1 release \[skip ci\] [\#62](https://github.com/nubisproject/nubis-sso/pull/62) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v2.0.1 release \[skip ci\] [\#61](https://github.com/nubisproject/nubis-sso/pull/61) ([tinnightcap](https://github.com/tinnightcap))
 - Nubis cron for scout [\#58](https://github.com/nubisproject/nubis-sso/pull/58) ([limed](https://github.com/limed))
 - Enable Traefik access logs [\#57](https://github.com/nubisproject/nubis-sso/pull/57) ([gozer](https://github.com/gozer))
