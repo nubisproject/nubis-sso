@@ -60,6 +60,13 @@ apache::vhost { 'localhost':
     ],
     access_log_env_var => '!internal',
     access_log_format  => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"',
+    directories        => [
+      {
+        'path'     => '/var/www/html',
+        'provider' => 'directory',
+        'require'  => 'local',
+      },
+    ],
 }
 
 apache::vhost { $project_name:
