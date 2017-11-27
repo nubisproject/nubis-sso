@@ -1,5 +1,5 @@
-$mod_auth_openidc_version = '2.2.0'
-$libcjose_version = '0.4.1'
+$mod_auth_openidc_version = '2.3.0'
+$libcjose_version = '0.5.1'
 $asg_route53_version = 'v0.0.2-beta3'
 
 class { 'nubis_apache':
@@ -225,16 +225,19 @@ exec { 'chmod asg-route53':
 
 # Install mod_auth_openidc and dependency
 package { 'libjansson4':
-  ensure => installed,
+  ensure => '2.7-*',
 }->
-package { 'libhiredis0.10':
-  ensure => installed,
+package { 'libhiredis0.13':
+  ensure => '0.13.3-*',
 }->
 package { 'memcached':
-  ensure => installed,
+  ensure => '1.4.25-*',
+}->
+package { 'libcurl3':
+  ensure => '7.47.0-*',
 }->
 staging::file { 'libcjose0.deb':
-  source => "https://github.com/pingidentity/mod_auth_openidc/releases/download/v${mod_auth_openidc_version}/libcjose0_${libcjose_version}-1.${::lsbdistcodename}.1_${::architecture}.deb",
+  source => "https://github.com/pingidentity/mod_auth_openidc/releases/download/v2.3.0/libcjose0_${libcjose_version}-1.wily.1_${::architecture}.deb",
 }->
 package { 'libcjose0':
   ensure   => installed,
@@ -242,15 +245,12 @@ package { 'libcjose0':
   source   => '/opt/staging/libcjose0.deb'
 }->
 staging::file { 'mod_auth_openidc.deb':
-  source => "https://github.com/pingidentity/mod_auth_openidc/releases/download/v${mod_auth_openidc_version}/libapache2-mod-auth-openidc_${mod_auth_openidc_version}-1.${::lsbdistcodename}.1_${::architecture}.deb",
+  source => "https://github.com/pingidentity/mod_auth_openidc/releases/download/v${mod_auth_openidc_version}/libapache2-mod-auth-openidc_${mod_auth_openidc_version}-1.wily.1_${::architecture}.deb",
 }->
 package { 'mod_auth_openidc':
   ensure   => installed,
   provider => dpkg,
   source   => '/opt/staging/mod_auth_openidc.deb',
-  require  => [
-    Class['Nubis_apache'],
-  ]
 }->
 apache::mod { 'auth_openidc': }
 
