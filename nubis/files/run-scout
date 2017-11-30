@@ -5,5 +5,5 @@
 # the host settle down before running Scout
 sleep $(( RANDOM % 600 ))
 
-nice -n 19 /usr/local/bin/Scout2 --force --no-browser  --report-dir /var/www/html/scout --ruleset /usr/local/bin/nubis-scout-ruleset.json &
+nice -n 19 /usr/local/bin/Scout2 --force --no-browser  --report-dir /var/www/html/scout --ruleset /usr/local/bin/nubis-scout-ruleset.json --regions "$(nubis-region)" &
 disown
