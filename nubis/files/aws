@@ -56,7 +56,7 @@ signin_token = json.loads(r.text)
 # sign-in token was issued.
 request_parameters = "?Action=login" 
 request_parameters += "&Issuer=Nubis" 
-request_parameters += "&Destination=" + urllib.quote_plus("https://" + region + "console.aws.amazon.com/")
+request_parameters += "&Destination=" + urllib.quote_plus("https://" + region + ".console.aws.amazon.com/")
 request_parameters += "&SigninToken=" + signin_token["SigninToken"]
 request_url = "https://signin.aws.amazon.com/federation" + request_parameters
 
