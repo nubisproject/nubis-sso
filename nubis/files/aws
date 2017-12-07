@@ -7,9 +7,14 @@ import urllib, json
 import requests
 
 import boto3
+import boto.utils
 
 # Step 1: Authenticate user in your own identity system.
 user = os.environ['REMOTE_USER']
+
+# Detect our current region
+data = boto.utils.get_instance_identity()
+region = data['document']['region']
 
 # Step 2: Using the access keys for an IAM user in your AWS account,
 # call "AssumeRole" to get temporary access keys for the federated user
@@ -51,7 +56,7 @@ signin_token = json.loads(r.text)
 # sign-in token was issued.
 request_parameters = "?Action=login" 
 request_parameters += "&Issuer=Nubis" 
-request_parameters += "&Destination=" + urllib.quote_plus("https://console.aws.amazon.com/")
+request_parameters += "&Destination=" + urllib.quote_plus("https://" + region + "console.aws.amazon.com/")
 request_parameters += "&SigninToken=" + signin_token["SigninToken"]
 request_url = "https://signin.aws.amazon.com/federation" + request_parameters
 
