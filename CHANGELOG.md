@@ -1,14 +1,55 @@
 # Change Log
 
+## [v2.0.4](https://github.com/nubisproject/nubis-sso/tree/v2.0.4) (2017-12-08)
+[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.0.3...v2.0.4)
+
+**Fixed bugs:**
+
+- Authentication bypass for local content [\#68](https://github.com/nubisproject/nubis-sso/issues/68)
+
+**Closed issues:**
+
+- \[Scout\] Limit to the region we are deployed in [\#81](https://github.com/nubisproject/nubis-sso/issues/81)
+- \[aws\] Send people to the correct region [\#80](https://github.com/nubisproject/nubis-sso/issues/80)
+- Service discovery check for html template [\#77](https://github.com/nubisproject/nubis-sso/issues/77)
+- haul service discovery url doesn't differentiate between prod and stage [\#74](https://github.com/nubisproject/nubis-sso/issues/74)
+- Wrap bootup scout invocation with nubis-cron [\#59](https://github.com/nubisproject/nubis-sso/issues/59)
+
+**Merged pull requests:**
+
+- Add missing . [\#85](https://github.com/nubisproject/nubis-sso/pull/85) ([gozer](https://github.com/gozer))
+- Send folks to the right AWS region [\#84](https://github.com/nubisproject/nubis-sso/pull/84) ([gozer](https://github.com/gozer))
+- Limit scout runs to the current region [\#82](https://github.com/nubisproject/nubis-sso/pull/82) ([gozer](https://github.com/gozer))
+- Add some service discovery checks for consul-template [\#78](https://github.com/nubisproject/nubis-sso/pull/78) ([limed](https://github.com/limed))
+- \[Centennial\] [\#76](https://github.com/nubisproject/nubis-sso/pull/76) ([gozer](https://github.com/gozer))
+- Proper haul-admin split [\#75](https://github.com/nubisproject/nubis-sso/pull/75) ([limed](https://github.com/limed))
+
+## [v2.0.3](https://github.com/nubisproject/nubis-sso/tree/v2.0.3) (2017-11-02)
+[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.0.2...v2.0.3)
+
+**Closed issues:**
+
+- Tag v2.0.3 release [\#71](https://github.com/nubisproject/nubis-sso/issues/71)
+
+**Merged pull requests:**
+
+- Merge v2.0.3 release into develop. \[skip ci\] [\#73](https://github.com/nubisproject/nubis-sso/pull/73) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v2.0.3 release \[skip ci\] [\#72](https://github.com/nubisproject/nubis-sso/pull/72) ([tinnightcap](https://github.com/tinnightcap))
+- Patch v2.0.2 [\#70](https://github.com/nubisproject/nubis-sso/pull/70) ([gozer](https://github.com/gozer))
+- Allow local only access to our localhost virtual-host [\#69](https://github.com/nubisproject/nubis-sso/pull/69) ([gozer](https://github.com/gozer))
+
 ## [v2.0.2](https://github.com/nubisproject/nubis-sso/tree/v2.0.2) (2017-10-24)
 [Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.0.1...v2.0.2)
 
 **Closed issues:**
 
 - Wrap scout invocations with nubis-cron [\#23](https://github.com/nubisproject/nubis-sso/issues/23)
+- Tag v2.0.2 release [\#65](https://github.com/nubisproject/nubis-sso/issues/65)
 
 **Merged pull requests:**
 
+- Merge v2.0.2 release into develop. \[skip ci\] [\#67](https://github.com/nubisproject/nubis-sso/pull/67) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v2.0.2 release \[skip ci\] [\#66](https://github.com/nubisproject/nubis-sso/pull/66) ([tinnightcap](https://github.com/tinnightcap))
 - Use nubis-cron during startup to invoke run scout [\#64](https://github.com/nubisproject/nubis-sso/pull/64) ([limed](https://github.com/limed))
 
 ## [v2.0.1](https://github.com/nubisproject/nubis-sso/tree/v2.0.1) (2017-10-13)
