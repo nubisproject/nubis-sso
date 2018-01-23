@@ -1,8 +1,18 @@
 defaultEntryPoints = ["http","https"]
 checkNewVersion = false
-traefikLogsFile = "/var/log/traefik_error.log"
+
+{{ $debug := ( getv "/config/Debug" "false" ) }}
+{{ if ne $debug "false" }}
+logLevel = "DEBUG"
+acmeLogging = true
+{{ else }}
+logLevel = "INFO"
+acmeLogging = false
+{{ end }}
 
 [entryPoints]
+  [entryPoints.traefik]
+    address = ":9109"
   [entryPoints.http]
     address = ":80"
     compress = true
@@ -13,19 +23,28 @@ traefikLogsFile = "/var/log/traefik_error.log"
     compress = false
     [entryPoints.https.tls]
 
-[web]
-address = ":9109"
+[ping]
+[api]
+  [api.statistics]
+[metrics]
+  [metrics.prometheus]
+
+[traefiklog]
+  filepath = "/var/log/traefik_error.log"
+  format   = "json"
 
 [accessLog]
 filePath = "/var/log/traefik.log"
 format = "json"
 
-[web.metrics.prometheus]
-
 [consul]
 endpoint = "127.0.0.1:8500"
 watch = true
 prefix = "nubis/{{ getv "/config/Project" }}/{{ getv "/config/Arena" }}/traefik/config"
+
+# Use HTTP-01 challenges
+[acme.httpChallenge]
+  entryPoint = "http"
 
 [acme]
 # Handle when this isn't set
