@@ -1,4 +1,4 @@
-$traefik_version = '1.4.0-rc4'
+$traefik_version = '1.5.0'
 $traefik_url = "https://github.com/containous/traefik/releases/download/v${traefik_version}/traefik_linux-amd64"
 
 notice ("Grabbing traefik ${traefik_version}")
@@ -19,43 +19,19 @@ file { '/etc/traefik':
   mode   => '0640',
 }
 
+systemd::unit_file { 'traefik.service':
+  source => 'puppet:///nubis/files/traefik.systemd',
+}->
+service { 'traefik':
+  enable => true,
+}
+
 file { '/etc/logrotate.d/traefik':
   ensure => file,
   owner  => root,
   group  => root,
   mode   => '0644',
   source => 'puppet:///nubis/files/traefik.logrotate',
-}
-
-upstart::job { 'traefik':
-    description    => 'Traefik Load Balancer',
-    service_ensure => 'stopped',
-    require        => [
-      Staging::File['/usr/local/bin/traefik'],
-    ],
-    # Never give up
-    respawn        => true,
-    respawn_limit  => 'unlimited',
-    start_on       => '(local-filesystems and net-device-up IFACE!=lo)',
-    env            => {
-      'SLEEP_TIME' => 1,
-      'GOMAXPROCS' => 2,
-    },
-    user           => 'root',
-    group          => 'root',
-    script         => 'exec /usr/local/bin/traefik --web.readonly=true --loglevel=INFO',
-    post_stop      => '
-goal=$(initctl status $UPSTART_JOB | awk \'{print $2}\' | cut -d \'/\' -f 1)
-if [ $goal != "stop" ]; then
-    echo "Backoff for $SLEEP_TIME seconds"
-    sleep $SLEEP_TIME
-    NEW_SLEEP_TIME=`expr 2 \* $SLEEP_TIME`
-    if [ $NEW_SLEEP_TIME -ge 60 ]; then
-        NEW_SLEEP_TIME=60
-    fi
-    initctl set-env SLEEP_TIME=$NEW_SLEEP_TIME
-fi
-',
 }
 
 file { '/etc/consul/svc-traefik.json':

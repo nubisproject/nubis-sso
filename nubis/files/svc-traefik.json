@@ -4,7 +4,7 @@
     "tags": [ "sso", "%%ARENA%%" ],
     "port": 9109,
     "check": {
-       "http": "http://localhost:9109/health",
+       "http": "http://localhost:9109/ping",
        "interval": "10s",
        "timeout": "1s"
     }

@@ -4,21 +4,29 @@
 <img align="middle" height=54 width=54 src="https://avatars2.githubusercontent.com/u/11081104?v=3">
 <b><a target="_top" href=/>[<!--#echo var="NUBIS_ACCOUNT" -->][<!--#echo var="NUBIS_ARENA" -->]</a></b>
 <a target="middle" href=/consul/ui/>[Key-Value]</a></li>
+{{ if service "prometheus" -}}
 <a target="middle" href=/prometheus/graph>[Monitoring]</a></li>
+{{ end -}}
+{{ if service "alertmanager" -}}
 <a target="middle" href=/alertmanager>[Alerting]</a></li>
+{{ end -}}
+{{ if service "grafana" -}}
 <a target="middle" href=/grafana/>[Graphs]</a></li>
+{{ end -}}
 <a target="middle" href=/kibana/app/kibana>[Logs]</a></li>
 <a target="_blank" href=/aws>[AWS]</a></li>
 <a target="middle" href=/scout/>[Security-Beta]</a></li>
 {{ if service "jenkins" -}}
 <a target="middle" href=/jenkins/>[Pipeline]</a></li>
 {{ end -}}
-{{range services}}
-  {{ if .Tags | contains "sso=true" }}|{{range service .Name }}
-    <a target="middle" href=/admin/{{.Name}}/>[{{.Name}}]</a></li>
-    {{end}}
-  {{end}}
-{{end}}
+{{range services}}{{ if .Tags | contains "sso=true" }}|{{ range $tag, $services := service .Name | byTag -}}
+    {{ range $services -}}{{ if $tag | regexMatch "^environment=(.+)$" -}}
+        {{ $environment := index ($tag | split "=") 1 }}
+    <a target="middle" href=/admin/{{.Name}}-{{ $environment }}/>[{{.Name}}-{{ $environment }}]</a></li>
+    {{end -}}
+  {{end -}}
+{{end -}}
+{{ end -}}{{ end -}}
 </body>
 
 <!-- {{ timestamp }} -->
