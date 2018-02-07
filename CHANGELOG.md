@@ -1,17 +1,32 @@
 # Change Log
 
+## [v2.1.0](https://github.com/nubisproject/nubis-sso/tree/v2.1.0) (2018-02-07)
+[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.1.0...v2.1.0)
+
+**Closed issues:**
+
+- pos\_file can't be duplicate [\#98](https://github.com/nubisproject/nubis-sso/issues/98)
+
+**Merged pull requests:**
+
+- Use distinct names for pos\_file [\#99](https://github.com/nubisproject/nubis-sso/pull/99) ([gozer](https://github.com/gozer))
+
 ## [v2.1.0](https://github.com/nubisproject/nubis-sso/tree/v2.1.0) (2018-02-06)
 [Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.0.4...v2.1.0)
 
 **Closed issues:**
 
-- Tag v2.1.0 release [\#92](https://github.com/nubisproject/nubis-sso/issues/92)
 - Fix template to support multiple additional items [\#90](https://github.com/nubisproject/nubis-sso/issues/90)
 - Upgrade to Traefik v1.5.0 [\#88](https://github.com/nubisproject/nubis-sso/issues/88)
 - Expose purpose tag [\#87](https://github.com/nubisproject/nubis-sso/issues/87)
+- Tag v2.1.0 release [\#93](https://github.com/nubisproject/nubis-sso/issues/93)
+- Tag v2.1.0 release [\#92](https://github.com/nubisproject/nubis-sso/issues/92)
+- Wrap scout invocations with nubis-cron [\#23](https://github.com/nubisproject/nubis-sso/issues/23)
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.1.0 release \[skip ci\] [\#97](https://github.com/nubisproject/nubis-sso/pull/97) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.1.0 release \[skip ci\] [\#96](https://github.com/nubisproject/nubis-sso/pull/96) ([nubis-automation](https://github.com/nubis-automation))
 - Fixing module location [\#94](https://github.com/nubisproject/nubis-sso/pull/94) ([limed](https://github.com/limed))
 - This adds support multiple user added apps that you want to live behind sso [\#91](https://github.com/nubisproject/nubis-sso/pull/91) ([limed](https://github.com/limed))
 - Upgrade to Traefik v1.5.0 [\#89](https://github.com/nubisproject/nubis-sso/pull/89) ([gozer](https://github.com/gozer))
@@ -60,7 +75,6 @@
 
 **Closed issues:**
 
-- Wrap scout invocations with nubis-cron [\#23](https://github.com/nubisproject/nubis-sso/issues/23)
 - Tag v2.0.2 release [\#65](https://github.com/nubisproject/nubis-sso/issues/65)
 
 **Merged pull requests:**
