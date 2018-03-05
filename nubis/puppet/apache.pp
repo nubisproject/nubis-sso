@@ -217,8 +217,8 @@ OIDCSessionInactivityTimeout 43200
 staging::file { '/usr/local/bin/asg-route53':
   source => "https://github.com/gozer/asg-route53/releases/download/${asg_route53_version}/asg-route53.${asg_route53_version}-linux_amd64",
   target => '/usr/local/bin/asg-route53',
-}->
-exec { 'chmod asg-route53':
+}
+->exec { 'chmod asg-route53':
   command => 'chmod 755 /usr/local/bin/asg-route53',
   path    => ['/usr/bin','/bin'],
 }
@@ -226,33 +226,33 @@ exec { 'chmod asg-route53':
 # Install mod_auth_openidc and dependency
 package { 'libjansson4':
   ensure => '2.7-*',
-}->
-package { 'libhiredis0.13':
+}
+->package { 'libhiredis0.13':
   ensure => '0.13.3-*',
-}->
-package { 'memcached':
+}
+->package { 'memcached':
   ensure => '1.4.25-*',
-}->
-package { 'libcurl3':
+}
+->package { 'libcurl3':
   ensure => '7.47.0-*',
-}->
-staging::file { 'libcjose0.deb':
+}
+->staging::file { 'libcjose0.deb':
   source => "https://github.com/pingidentity/mod_auth_openidc/releases/download/v2.3.0/libcjose0_${libcjose_version}-1.wily.1_${::architecture}.deb",
-}->
-package { 'libcjose0':
+}
+->package { 'libcjose0':
   ensure   => installed,
   provider => dpkg,
   source   => '/opt/staging/libcjose0.deb'
-}->
-staging::file { 'mod_auth_openidc.deb':
+}
+->staging::file { 'mod_auth_openidc.deb':
   source => "https://github.com/pingidentity/mod_auth_openidc/releases/download/v${mod_auth_openidc_version}/libapache2-mod-auth-openidc_${mod_auth_openidc_version}-1.wily.1_${::architecture}.deb",
-}->
-package { 'mod_auth_openidc':
+}
+->package { 'mod_auth_openidc':
   ensure   => installed,
   provider => dpkg,
   source   => '/opt/staging/mod_auth_openidc.deb',
-}->
-apache::mod { 'auth_openidc': }
+}
+->apache::mod { 'auth_openidc': }
 
 python::pip { 'boto':
   ensure =>  '2.48.0'
