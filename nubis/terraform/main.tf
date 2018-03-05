@@ -1,5 +1,5 @@
 provider "aws" {
-  region  = "${var.aws_region}"
+  region = "${var.aws_region}"
 }
 
 module "sso-image" {
@@ -59,9 +59,9 @@ resource "aws_security_group" "sso" {
   }
 
   tags = {
-    Name        = "${var.project}-${element(var.arenas, count.index)}"
-    Region      = "${var.aws_region}"
-    Arena = "${element(var.arenas, count.index)}"
+    Name   = "${var.project}-${element(var.arenas, count.index)}"
+    Region = "${var.aws_region}"
+    Arena  = "${element(var.arenas, count.index)}"
   }
 }
 
@@ -160,9 +160,9 @@ resource "aws_iam_role_policy" "scout" {
     create_before_destroy = true
   }
 
-  name    = "${var.project}-scout-${element(var.arenas, count.index)}-${var.aws_region}"
-  role    = "${element(aws_iam_role.sso.*.id, count.index)}"
-  policy  = "${file("${path.module}/Scout2-Default.json")}"
+  name   = "${var.project}-scout-${element(var.arenas, count.index)}-${var.aws_region}"
+  role   = "${element(aws_iam_role.sso.*.id, count.index)}"
+  policy = "${file("${path.module}/Scout2-Default.json")}"
 }
 
 resource "aws_launch_configuration" "sso" {
@@ -180,12 +180,12 @@ resource "aws_launch_configuration" "sso" {
   key_name             = "${var.key_name}"
   iam_instance_profile = "${element(aws_iam_instance_profile.sso.*.name, count.index)}"
 
-  enable_monitoring    = false
+  enable_monitoring = false
 
   associate_public_ip_address = true
 
   root_block_device = {
-    volume_type = "gp2"
+    volume_type           = "gp2"
     delete_on_termination = true
   }
 
@@ -277,17 +277,17 @@ resource "null_resource" "secrets" {
 
   # Important to list here every variable that affects what needs to be put into KMS
   triggers {
-    credstash_key = "${var.credstash_key}"
-    client_id     = "${var.openid_client_id}"
-    client_secret = "${var.openid_client_secret}"
+    credstash_key   = "${var.credstash_key}"
+    client_id       = "${var.openid_client_id}"
+    client_secret   = "${var.openid_client_secret}"
     iam_user_id     = "${aws_iam_access_key.sso.id}"
     iam_user_secret = "${aws_iam_access_key.sso.secret}"
-    region        = "${var.aws_region}"
-    version       = "${var.nubis_version}"
-    context       = "-E region:${var.aws_region} -E arena:${element(var.arenas, count.index)} -E service:${var.project}"
-    unicreds      = "unicreds -r ${var.aws_region} put -k ${var.credstash_key} ${var.project}/${element(var.arenas, count.index)}"
-    unicreds_rm   = "unicreds -r ${var.aws_region} delete -k ${var.credstash_key} ${var.project}/${element(var.arenas, count.index)}"
-    unicreds_file = "unicreds -r ${var.aws_region} put-file -k ${var.credstash_key} ${var.project}/${element(var.arenas, count.index)}"
+    region          = "${var.aws_region}"
+    version         = "${var.nubis_version}"
+    context         = "-E region:${var.aws_region} -E arena:${element(var.arenas, count.index)} -E service:${var.project}"
+    unicreds        = "unicreds -r ${var.aws_region} put -k ${var.credstash_key} ${var.project}/${element(var.arenas, count.index)}"
+    unicreds_rm     = "unicreds -r ${var.aws_region} delete -k ${var.credstash_key} ${var.project}/${element(var.arenas, count.index)}"
+    unicreds_file   = "unicreds -r ${var.aws_region} put-file -k ${var.credstash_key} ${var.project}/${element(var.arenas, count.index)}"
   }
 
   provisioner "local-exec" {
@@ -325,11 +325,10 @@ resource "null_resource" "secrets" {
     when    = "destroy"
     command = "${self.triggers.unicreds_rm}/iam/client_secret"
   }
-
 }
 
 resource "aws_elasticache_subnet_group" "sso" {
-  count       = "${var.persistent_sessions * var.enabled * length(var.arenas)}"
+  count = "${var.persistent_sessions * var.enabled * length(var.arenas)}"
 
   lifecycle {
     create_before_destroy = true
@@ -347,7 +346,7 @@ resource "aws_elasticache_subnet_group" "sso" {
 }
 
 resource "aws_security_group" "sessions" {
-  count  = "${var.persistent_sessions * var.enabled * length(var.arenas)}"
+  count = "${var.persistent_sessions * var.enabled * length(var.arenas)}"
 
   lifecycle {
     create_before_destroy = true
@@ -375,13 +374,13 @@ resource "aws_security_group" "sessions" {
   tags = {
     Name           = "${var.project}-${element(var.arenas, count.index)}-sessions"
     Region         = "${var.aws_region}"
-    Arena    = "${element(var.arenas, count.index)}"
+    Arena          = "${element(var.arenas, count.index)}"
     TechnicalOwner = "${var.technical_contact}"
   }
 }
 
 resource "aws_elasticache_cluster" "cache" {
-  count  = "${var.persistent_sessions * var.enabled * length(var.arenas)}"
+  count = "${var.persistent_sessions * var.enabled * length(var.arenas)}"
 
   lifecycle {
     create_before_destroy = true
@@ -402,7 +401,7 @@ resource "aws_elasticache_cluster" "cache" {
   tags = {
     Name           = "${var.project}-${element(var.arenas, count.index)}-sessions"
     Region         = "${var.aws_region}"
-    Arena    = "${element(var.arenas, count.index)}"
+    Arena          = "${element(var.arenas, count.index)}"
     TechnicalOwner = "${var.technical_contact}"
   }
 }
@@ -441,11 +440,12 @@ EOF
 }
 
 resource "aws_iam_policy" "readonly" {
-    count       = "${var.enabled}"
-    name        = "readonly-${var.aws_region}"
-    path        = "/nubis/sso/"
-    description = "SSO Dashboard Policy"
-    policy = <<EOF
+  count       = "${var.enabled}"
+  name        = "readonly-${var.aws_region}"
+  path        = "/nubis/sso/"
+  description = "SSO Dashboard Policy"
+
+  policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
