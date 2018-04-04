@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "sso-image" {
-  source = "github.com/gozer/nubis-terraform///images?ref=issue%2F162%2Ftf"
+  source = "github.com/nubisproject/nubis-terraform///images?ref=develop"
 
   region        = "${var.aws_region}"
   image_version = "${var.nubis_version}"
