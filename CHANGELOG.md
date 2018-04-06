@@ -1,5 +1,22 @@
 # Change Log
 
+## [v2.2.0](https://github.com/nubisproject/nubis-sso/tree/v2.2.0) (2018-04-06)
+[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.1.0...v2.2.0)
+
+**Closed issues:**
+
+- \[TF\] Cleanup for 0.11.x [\#112](https://github.com/nubisproject/nubis-sso/issues/112)
+- Tag project as a platform project [\#108](https://github.com/nubisproject/nubis-sso/issues/108)
+- \[auth0\] Move auth0 to oidc-conformant mode [\#83](https://github.com/nubisproject/nubis-sso/issues/83)
+
+**Merged pull requests:**
+
+- Fix \#112 [\#113](https://github.com/nubisproject/nubis-sso/pull/113) ([gozer](https://github.com/gozer))
+- Tagging project as a platform component [\#111](https://github.com/nubisproject/nubis-sso/pull/111) ([limed](https://github.com/limed))
+- Lint fix [\#110](https://github.com/nubisproject/nubis-sso/pull/110) ([limed](https://github.com/limed))
+- Migrate to new travis docker method [\#107](https://github.com/nubisproject/nubis-sso/pull/107) ([tinnightcap](https://github.com/tinnightcap))
+- Make ourselves compatible with the new OpenID compliant mode of Auth0 [\#106](https://github.com/nubisproject/nubis-sso/pull/106) ([gozer](https://github.com/gozer))
+
 ## [v2.1.0](https://github.com/nubisproject/nubis-sso/tree/v2.1.0) (2018-02-07)
 [Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.0.4...v2.1.0)
 
@@ -9,6 +26,7 @@
 - Fix template to support multiple additional items [\#90](https://github.com/nubisproject/nubis-sso/issues/90)
 - Upgrade to Traefik v1.5.0 [\#88](https://github.com/nubisproject/nubis-sso/issues/88)
 - Expose purpose tag [\#87](https://github.com/nubisproject/nubis-sso/issues/87)
+- Tag v2.1.0 release [\#103](https://github.com/nubisproject/nubis-sso/issues/103)
 - Tag v2.1.0 release [\#100](https://github.com/nubisproject/nubis-sso/issues/100)
 - Tag v2.1.0 release [\#93](https://github.com/nubisproject/nubis-sso/issues/93)
 - Tag v2.1.0 release [\#92](https://github.com/nubisproject/nubis-sso/issues/92)
@@ -16,6 +34,8 @@
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.1.0 release \[skip ci\] [\#105](https://github.com/nubisproject/nubis-sso/pull/105) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.1.0 release \[skip ci\] [\#104](https://github.com/nubisproject/nubis-sso/pull/104) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.1.0 release \[skip ci\] [\#102](https://github.com/nubisproject/nubis-sso/pull/102) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.1.0 release \[skip ci\] [\#101](https://github.com/nubisproject/nubis-sso/pull/101) ([nubis-automation](https://github.com/nubis-automation))
 - Use distinct names for pos\_file [\#99](https://github.com/nubisproject/nubis-sso/pull/99) ([gozer](https://github.com/gozer))
