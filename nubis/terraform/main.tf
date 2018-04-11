@@ -5,9 +5,9 @@ provider "aws" {
 module "sso-image" {
   source = "github.com/nubisproject/nubis-terraform///images?ref=develop"
 
-  region  = "${var.aws_region}"
-  version = "${var.nubis_version}"
-  project = "nubis-sso"
+  region        = "${var.aws_region}"
+  image_version = "${var.nubis_version}"
+  project       = "nubis-sso"
 }
 
 resource "aws_security_group" "sso" {
