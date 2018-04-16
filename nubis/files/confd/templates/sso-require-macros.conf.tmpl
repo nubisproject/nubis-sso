@@ -2,7 +2,6 @@
 <Macro RequireOnlyAdmins>
   <RequireAny>
 {{- if exists "/config/SudoGroups" }}{{ range split (getv "/config/SudoGroups") "," }}
-    Require claim groups:{{.}}
     Require claim https://sso.mozilla.com/claim/groups:{{.}}
 {{- end }}{{ end }}
   </RequireAny>
@@ -13,13 +12,11 @@
   <RequireAny>
     #Admins
 {{- if exists "/config/SudoGroups" }}{{ range split (getv "/config/SudoGroups") "," }}
-    Require claim groups:{{.}}
     Require claim https://sso.mozilla.com/claim/groups:{{.}}
 {{- end }}{{ end }}
 
     #Users
 {{- if exists "/config/UserGroups" }}{{ range split (getv "/config/UserGroups") "," }}
-    Require claim groups:{{.}}
     Require claim https://sso.mozilla.com/claim/groups:{{.}}
 {{- end }}{{ end }}
   </RequireAny>
