@@ -19,6 +19,20 @@ file { '/var/www/html/scout/index.html':
   ],
 }
 
+# Dummy placeholder until real report exists
+file { '/var/www/html/scout/report.html':
+  ensure  => 'present',
+  mode    => '0644',
+  owner   => 'root',
+  group   => 'root',
+  require => [
+    File['/var/www/html/scout'],
+  ],
+  content => @(EOF),
+  Security report not generated yet, check again tomorrow
+EOF
+}
+
 file { '/usr/local/bin/run-scout':
   ensure  => file,
   owner   => root,
