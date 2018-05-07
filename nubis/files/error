@@ -1,0 +1,25 @@
+#!/usr/bin/env perl
+
+use strict;
+use CGI;
+
+my $q = CGI->new;
+
+print $q->header(
+               -type            => 'text/plain',
+               -status          => "$ENV{REDIRECT_STATUS} Condition Intercepted",
+           );
+
+my $reason = $q->param('reason');
+my $service_url = $ENV{'REDIRECT_URL'};
+my $service = $q->param('service');
+my $user = $q->http('HTTP_X_NUBIS_SSO_USERNAME');
+my @groups = split(',',$q->http('HTTP_X_NUBIS_SSO_GROUPS'));
+
+print "Sorry, but $user doesn't have access to $service at $service_url because $reason\n";
+print "\n";
+print "You are member of the following groups:\n";
+
+foreach my $group (sort @groups) {
+  print " - $group\n";
+}
