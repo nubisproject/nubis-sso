@@ -14,6 +14,7 @@ class { 'apache::mod::proxy': }
 class { 'apache::mod::proxy_http': }
 class { 'apache::mod::proxy_html': }
 class { 'apache::mod::include': }
+class { 'apache::mod::ssl': }
 
 apache::mod { 'sed': }
 apache::mod { 'macro': }
@@ -76,6 +77,13 @@ apache::vhost { $project_name:
     docroot_owner      => 'root',
     docroot_group      => 'root',
     block              => ['scm'],
+
+    ssl_proxyengine		=> true,
+    ssl_proxy_verify		=> 'none',
+    ssl_proxy_check_peer_cn	=> 'off',
+    ssl_proxy_check_peer_name	=> 'off',
+    ssl_proxy_check_peer_expire => 'off',
+
     setenvif           => [
       'X-Forwarded-Proto https HTTPS=on',
       'Remote_Addr 127\.0\.0\.1 internal',
@@ -147,6 +155,18 @@ apache::vhost { $project_name:
     SetEnv proxy-nokeepalive 1
     ProxyPass http://jenkins.service.consul:8080/jenkins disablereuse=on ttl=60 keepalive=off timeout=10
     ProxyPassReverse http://jenkins.service.consul:8080/jenkins
+',
+      },
+      {
+        'path'            => '/kubernetes',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
+
+    Use RBAC_Kubernetes
+
+    ProxyPass https://kubernetes.service.consul:31443 disablereuse=on ttl=60
+    ProxyPassReverse https://kubernetes.service.consul:31443
 ',
       },
       {

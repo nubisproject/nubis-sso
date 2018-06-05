@@ -127,3 +127,10 @@
     Use RequireEverybody
   </RequireAny>
 </Macro>
+
+<Macro RBAC_Kubernetes>
+  ErrorDocument 401 "/rbac-not-authorized?reason=you+are+not+an+authorized+user&service=Kubernetes"
+  <RequireAny>
+    Use RequireEverybody
+  </RequireAny>
+</Macro>
