@@ -127,3 +127,14 @@
     Use RequireEverybody
   </RequireAny>
 </Macro>
+
+<Macro RBAC_Kubernetes>
+{{- if exists "/config/Kubernetes/Dashboard/Token" }}
+  # Use a cluster provided token for role authentication
+  RequestHeader set Authorization "Bearer {{ getv "/config/Kubernetes/Dashboard/Token" }}"
+{{- end }}
+  ErrorDocument 401 "/rbac-not-authorized?reason=you+are+not+an+authorized+user&service=Kubernetes"
+  <RequireAny>
+    Use RequireEverybody
+  </RequireAny>
+</Macro>

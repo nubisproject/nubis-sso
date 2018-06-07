@@ -14,6 +14,7 @@ class { 'apache::mod::proxy': }
 class { 'apache::mod::proxy_http': }
 class { 'apache::mod::proxy_html': }
 class { 'apache::mod::include': }
+class { 'apache::mod::ssl': }
 
 apache::mod { 'sed': }
 apache::mod { 'macro': }
@@ -70,28 +71,35 @@ apache::vhost { 'localhost':
 }
 
 apache::vhost { $project_name:
-    port               => 82,
-    default_vhost      => true,
-    docroot            => '/var/www/html',
-    docroot_owner      => 'root',
-    docroot_group      => 'root',
-    block              => ['scm'],
-    setenvif           => [
+    port                        => 82,
+    default_vhost               => true,
+    docroot                     => '/var/www/html',
+    docroot_owner               => 'root',
+    docroot_group               => 'root',
+    block                       => ['scm'],
+
+    ssl_proxyengine             => true,
+    ssl_proxy_verify            => 'none',
+    ssl_proxy_check_peer_cn     => 'off',
+    ssl_proxy_check_peer_name   => 'off',
+    ssl_proxy_check_peer_expire => 'off',
+
+    setenvif                    => [
       'X-Forwarded-Proto https HTTPS=on',
       'Remote_Addr 127\.0\.0\.1 internal',
       'Remote_Addr ^10\. internal',
     ],
 
     # Create 2 canonical outging HTTP headers with Username and the groups they belong to
-    request_headers    => [
+    request_headers             => [
       'set X-Nubis-SSO-Username "%{OIDC_CLAIM_email}e"',
       'set X-Nubis-SSO-Groups "%{OIDC_CLAIM_https---sso.mozilla.com-claim-groups}e"',
     ],
 
-    access_log_env_var => '!internal',
-    access_log_format  => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"',
+    access_log_env_var          => '!internal',
+    access_log_format           => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"',
 
-    aliases            => [
+    aliases                     => [
       {
         'scriptalias' => '/aws',
         'path'        => '/var/www/html/aws.py',
@@ -102,7 +110,7 @@ apache::vhost { $project_name:
       },
     ],
 
-    directories        => [
+    directories                 => [
       {
         'path'     => '/var/www/html',
         'provider' => 'directory',
@@ -147,6 +155,18 @@ apache::vhost { $project_name:
     SetEnv proxy-nokeepalive 1
     ProxyPass http://jenkins.service.consul:8080/jenkins disablereuse=on ttl=60 keepalive=off timeout=10
     ProxyPassReverse http://jenkins.service.consul:8080/jenkins
+',
+      },
+      {
+        'path'            => '/kubernetes',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
+
+    Use RBAC_Kubernetes
+
+    ProxyPass https://kubernetes.service.consul:31443 disablereuse=on ttl=60
+    ProxyPassReverse https://kubernetes.service.consul:31443
 ',
       },
       {
@@ -228,7 +248,7 @@ apache::vhost { $project_name:
         require     => 'valid-user',
       },
     ],
-    custom_fragment    => "
+    custom_fragment             => "
 # Clustered without coordination
 FileETag None
 
@@ -245,7 +265,7 @@ OIDCUserInfoRefreshInterval 15
 OIDCSessionMaxDuration 0
 OIDCSessionInactivityTimeout 43200
 ",
-    headers            => [
+    headers                     => [
       "set X-Nubis-Version ${project_version}",
       "set X-Nubis-Project ${project_name}",
       "set X-Nubis-Build   ${packer_build_name}",
