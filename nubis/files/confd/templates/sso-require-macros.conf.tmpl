@@ -1,26 +1,140 @@
 # Limit Access to Admins
-<Macro RequireOnlyAdmins>
+<Macro RequireAdmins>
+{{- if exists "/config/SudoGroups" }}
   <RequireAny>
-{{- if exists "/config/SudoGroups" }}{{ range split (getv "/config/SudoGroups") "," }}
-    Require claim groups:{{.}}
+  {{- range split (getv "/config/SudoGroups") "," }}
     Require claim https://sso.mozilla.com/claim/groups:{{.}}
-{{- end }}{{ end }}
+  {{- end }}
+  </RequireAny>
+{{- else }}
+    Require claim https://sso.mozilla.com/claim/unknown:no-admins
+{{- end }}
+</Macro>
+
+# Limit Access to Opers
+<Macro RequireOpers>
+{{- if exists "/config/OperGroups" }}
+  <RequireAny>
+  {{- range split (getv "/config/OperGroups") "," }}
+    Require claim https://sso.mozilla.com/claim/groups:{{.}}
+  {{- end }}
+  </RequireAny>
+{{- else }}
+    Require claim https://sso.mozilla.com/claim/unknown:no-opers
+{{- end }}
+</Macro>
+
+# Limit Access to Users
+<Macro RequireUsers>
+{{- if exists "/config/UserGroups" }}
+  <RequireAny>
+  {{- range split (getv "/config/UserGroups") "," }}
+    Require claim https://sso.mozilla.com/claim/groups:{{.}}
+  {{- end }}
+  </RequireAny>
+{{- else }}
+    Require claim https://sso.mozilla.com/claim/unknown:no-users
+{{- end }}
+</Macro>
+
+# Limit Access to Everybody we care about
+<Macro RequireEverybody>
+  <RequireAny>
+    #Admins
+    Use  RequireAdmins
+
+    #Opers
+    Use RequireOpers
+
+    #Users
+    Use RequireUsers
   </RequireAny>
 </Macro>
 
-# Limit Access to Regular users and Admins
-<Macro RequireAdminsOrUsers>
+# Rules for Consul Access
+<Macro RBAC_Consul>
+  ErrorDocument 401 "/rbac-not-authorized?reason=you+are+not+an+operator+or+an+admin&service=Consul"
   <RequireAny>
-    #Admins
-{{- if exists "/config/SudoGroups" }}{{ range split (getv "/config/SudoGroups") "," }}
-    Require claim groups:{{.}}
-    Require claim https://sso.mozilla.com/claim/groups:{{.}}
-{{- end }}{{ end }}
+    #Admins can do it all
+    Use RequireAdmins
 
-    #Users
-{{- if exists "/config/UserGroups" }}{{ range split (getv "/config/UserGroups") "," }}
-    Require claim groups:{{.}}
-    Require claim https://sso.mozilla.com/claim/groups:{{.}}
-{{- end }}{{ end }}
+    #Opers can do it all
+    Use RequireOpers
+
+    #Users can only read
+    <RequireAll>
+      Use RequireUsers
+      Require method GET HEAD
+    </RequireAll>
+  </RequireAny>
+</Macro>
+
+# Rules for Security Report
+# Admins and operators only
+<Macro RBAC_Scout>
+  ErrorDocument 401 "/rbac-not-authorized?reason=you+are+not+an+operator+or+an+admin&service=Scout"
+  <RequireAny>
+    Use RequireAdmins
+    Use RequireOpers
+  </RequireAny>
+</Macro>
+
+<Macro RBAC_Grafana>
+  ErrorDocument 401 "/rbac-not-authorized?reason=you+are+not+an+authorized+user&service=Grafana"
+  <RequireAny>
+    Use RequireEverybody
+  </RequireAny>
+</Macro>
+
+<Macro RBAC_Alertmanager>
+  ErrorDocument 401 "/rbac-not-authorized?reason=you+are+not+an+authorized+user&service=AlertManager"
+  <RequireAny>
+    Use RequireEverybody
+  </RequireAny>
+</Macro>
+
+<Macro RBAC_Prometheus>
+  ErrorDocument 401 "/rbac-not-authorized?reason=you+are+not+an+authorized+user&service=Prometheus"
+  <RequireAny>
+    Use RequireEverybody
+  </RequireAny>
+</Macro>
+
+<Macro RBAC_AWS>
+  ErrorDocument 401 "/rbac-not-authorized?reason=you+are+not+an+authorized+user&service=AWS"
+  <RequireAny>
+    Use RequireEverybody
+  </RequireAny>
+</Macro>
+
+<Macro RBAC_Kibana>
+  ErrorDocument 401 "/rbac-not-authorized?reason=you+are+not+an+authorized+user&service=Kibana"
+  <RequireAny>
+    Use RequireEverybody
+  </RequireAny>
+</Macro>
+
+<Macro RBAC_Elasticsearch>
+  ErrorDocument 401 "/rbac-not-authorized?reason=you+are+not+an+authorized+user&service=ElasticSearch"
+  <RequireAny>
+    Use RequireEverybody
+  </RequireAny>
+</Macro>
+
+<Macro RBAC_Jenkins>
+  ErrorDocument 401 "/rbac-not-authorized?reason=you+are+not+an+authorized+user&service=Jenkins"
+  <RequireAny>
+    Use RequireEverybody
+  </RequireAny>
+</Macro>
+
+<Macro RBAC_Kubernetes>
+{{- if exists "/config/Kubernetes/Dashboard/Token" }}
+  # Use a cluster provided token for role authentication
+  RequestHeader set Authorization "Bearer {{ getv "/config/Kubernetes/Dashboard/Token" }}"
+{{- end }}
+  ErrorDocument 401 "/rbac-not-authorized?reason=you+are+not+an+authorized+user&service=Kubernetes"
+  <RequireAny>
+    Use RequireEverybody
   </RequireAny>
 </Macro>

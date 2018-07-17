@@ -42,6 +42,10 @@ variable nubis_sudo_groups {
   default = "nubis_sudo_groups"
 }
 
+variable nubis_oper_groups {
+  default = ""
+}
+
 variable nubis_user_groups {
   default = ""
 }

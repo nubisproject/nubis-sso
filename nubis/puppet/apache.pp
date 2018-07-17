@@ -14,6 +14,7 @@ class { 'apache::mod::proxy': }
 class { 'apache::mod::proxy_http': }
 class { 'apache::mod::proxy_html': }
 class { 'apache::mod::include': }
+class { 'apache::mod::ssl': }
 
 apache::mod { 'sed': }
 apache::mod { 'macro': }
@@ -70,28 +71,46 @@ apache::vhost { 'localhost':
 }
 
 apache::vhost { $project_name:
-    port               => 82,
-    default_vhost      => true,
-    docroot            => '/var/www/html',
-    docroot_owner      => 'root',
-    docroot_group      => 'root',
-    block              => ['scm'],
-    setenvif           => [
+    port                        => 82,
+    default_vhost               => true,
+    docroot                     => '/var/www/html',
+    docroot_owner               => 'root',
+    docroot_group               => 'root',
+    block                       => ['scm'],
+
+    ssl_proxyengine             => true,
+    ssl_proxy_verify            => 'none',
+    ssl_proxy_check_peer_cn     => 'off',
+    ssl_proxy_check_peer_name   => 'off',
+    ssl_proxy_check_peer_expire => 'off',
+
+    setenvif                    => [
       'X-Forwarded-Proto https HTTPS=on',
       'Remote_Addr 127\.0\.0\.1 internal',
       'Remote_Addr ^10\. internal',
     ],
-    access_log_env_var => '!internal',
-    access_log_format  => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"',
 
-    aliases            => [
+    # Create 2 canonical outging HTTP headers with Username and the groups they belong to
+    request_headers             => [
+      'set X-Nubis-SSO-Username "%{OIDC_CLAIM_email}e"',
+      'set X-Nubis-SSO-Groups "%{OIDC_CLAIM_https---sso.mozilla.com-claim-groups}e"',
+    ],
+
+    access_log_env_var          => '!internal',
+    access_log_format           => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"',
+
+    aliases                     => [
       {
         'scriptalias' => '/aws',
         'path'        => '/var/www/html/aws.py',
       },
+      {
+        'scriptalias' => '/rbac-not-authorized',
+        'path'        => '/var/www/html/rbac-not-authorized',
+      },
     ],
 
-    directories        => [
+    directories                 => [
       {
         'path'     => '/var/www/html',
         'provider' => 'directory',
@@ -103,7 +122,8 @@ apache::vhost { $project_name:
         'auth_type'       => 'openid-connect',
         'require'         => 'unmanaged',
         'custom_fragment' => '
-	Use RequireAdminsOrUsers
+	ErrorDocument 401 "/rbac-not-authorized?reason=you+do+not+have+access+to+this+account"
+	Use RequireEverybody
 	ExpiresActive Off',
       },
       {
@@ -117,6 +137,8 @@ apache::vhost { $project_name:
     # var consulHost = \'\'
     # In consuls webUI
     OutputSed "s/\(var *consulHost *= *\)\'\'/\1\'\/consul\'/"
+    
+    Use RBAC_Consul
 
     ProxyPass http://consul.service.consul:8500 disablereuse=on ttl=60
     ProxyPassReverse http://consul.service.consul:8500
@@ -127,9 +149,24 @@ apache::vhost { $project_name:
         'provider'        => 'location',
         'require'         => 'unmanaged',
         'custom_fragment' => '
+
+    Use RBAC_Jenkins
+
     SetEnv proxy-nokeepalive 1
     ProxyPass http://jenkins.service.consul:8080/jenkins disablereuse=on ttl=60 keepalive=off timeout=10
     ProxyPassReverse http://jenkins.service.consul:8080/jenkins
+',
+      },
+      {
+        'path'            => '/kubernetes',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
+
+    Use RBAC_Kubernetes
+
+    ProxyPass https://kubernetes.service.consul:31443 disablereuse=on ttl=60
+    ProxyPassReverse https://kubernetes.service.consul:31443
 ',
       },
       {
@@ -137,6 +174,8 @@ apache::vhost { $project_name:
         'provider'        => 'location',
         'require'         => 'unmanaged',
         'custom_fragment' => '
+    Use RBAC_Elasticsearch
+
     ProxyPass http://es.service.consul:8080 disablereuse=on ttl=60
     ProxyPassReverse http://es.service.consul:8080
 ',
@@ -146,21 +185,36 @@ apache::vhost { $project_name:
         'provider'        => 'location',
         'require'         => 'unmanaged',
         'custom_fragment' => '
+    Use RBAC_Kibana
+
     ProxyPass http://localhost:5601 disablereuse=on ttl=60
     ProxyPassReverse http://localhost:5601
     OIDCPassClaimsAs none
 ',
       },
       {
-        'path'     => '/aws',
-        'provider' => 'location',
-        'require'  => 'unmanaged',
+        'path'            => '/aws',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
+    Use RBAC_AWS
+',
+      },
+      {
+        'path'            => '/scout',
+        'provider'        => 'location',
+        'require'         => 'unmanaged',
+        'custom_fragment' => '
+    Use RBAC_Scout
+',
       },
       {
         'path'            => '/prometheus',
         'provider'        => 'location',
         'require'         => 'unmanaged',
         'custom_fragment' => '
+    Use RBAC_Prometheus
+
     ProxyPass http://prometheus.service.consul:81/prometheus disablereuse=on ttl=60
     ProxyPassReverse http://prometheus.service.consul:81/prometheus
 ',
@@ -170,6 +224,8 @@ apache::vhost { $project_name:
         'provider'        => 'location',
         'require'         => 'unmanaged',
         'custom_fragment' => '
+    Use RBAC_Alertmanager
+
     ProxyPass http://alertmanager.service.consul:9093/alertmanager disablereuse=on ttl=60
     ProxyPassReverse http://alertmanager.service.consul:9093/alertmanager
 ',
@@ -179,6 +235,8 @@ apache::vhost { $project_name:
         'provider'        => 'location',
         'require'         => 'unmanaged',
         'custom_fragment' => '
+    Use RBAC_Grafana
+
     ProxyPass http://grafana.service.consul:3000 disablereuse=on ttl=60
     ProxyPassReverse http://grafana.service.consul:3000
 ',
@@ -190,7 +248,7 @@ apache::vhost { $project_name:
         require     => 'valid-user',
       },
     ],
-    custom_fragment    => "
+    custom_fragment             => "
 # Clustered without coordination
 FileETag None
 
@@ -207,10 +265,10 @@ OIDCUserInfoRefreshInterval 15
 OIDCSessionMaxDuration 0
 OIDCSessionInactivityTimeout 43200
 ",
-    headers            => [
-      "set X-SSO-Nubis-Version ${project_version}",
-      "set X-SSO-Nubis-Project ${project_name}",
-      "set X-SSO-Nubis-Build   ${packer_build_name}",
+    headers                     => [
+      "set X-Nubis-Version ${project_version}",
+      "set X-Nubis-Project ${project_name}",
+      "set X-Nubis-Build   ${packer_build_name}",
     ],
 }
 
@@ -258,6 +316,11 @@ python::pip { 'boto':
   ensure =>  '2.48.0'
 }
 
+# For our custom error page
+package { 'libcgi-pm-perl':
+  ensure => 'latest',
+}
+
 file { '/var/www/.aws':
   ensure  => directory,
   owner   => $::apache::params::user,
@@ -276,4 +339,16 @@ file { '/var/www/html/aws.py':
     Class['Nubis_apache'],
   ],
   source  => 'puppet:///nubis/files/aws',
+}
+
+file { '/var/www/html/rbac-not-authorized':
+  ensure  => present,
+  owner   => 'root',
+  group   => 'root',
+  mode    => '0755',
+  require => [
+    Class['Nubis_apache'],
+    Package['libcgi-pm-perl'],
+  ],
+  source  => 'puppet:///nubis/files/error',
 }

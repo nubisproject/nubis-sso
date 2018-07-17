@@ -19,6 +19,9 @@
 {{ if service "jenkins" -}}
 <a target="middle" href=/jenkins/>[Pipeline]</a></li>
 {{ end -}}
+{{ if service "kubernetes" -}}
+<a target="middle" href=/kubernetes/>[Kubernetes]</a></li>
+{{ end -}}
 {{range services}}{{ if .Tags | contains "sso=true" }}|{{ range $tag, $services := service .Name | byTag -}}
     {{ range $services -}}{{ if $tag | regexMatch "^environment=(.+)$" -}}
         {{ $environment := index ($tag | split "=") 1 }}
