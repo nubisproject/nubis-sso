@@ -1,5 +1,23 @@
 # Change Log
 
+## [v2.3.0](https://github.com/nubisproject/nubis-sso/tree/v2.3.0) (2018-07-17)
+[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.2.0...v2.3.0)
+
+**Closed issues:**
+
+- Add Kubernetes Dashboard if present [\#123](https://github.com/nubisproject/nubis-sso/issues/123)
+- RBAC: Fine-grained access controls [\#121](https://github.com/nubisproject/nubis-sso/issues/121)
+- Cleanup old openid group logic [\#119](https://github.com/nubisproject/nubis-sso/issues/119)
+- Upgrade Traefik to 1.5.4 [\#117](https://github.com/nubisproject/nubis-sso/issues/117)
+- Lint project [\#109](https://github.com/nubisproject/nubis-sso/issues/109)
+
+**Merged pull requests:**
+
+- Add \[Kubernetes\] tab if service is available [\#124](https://github.com/nubisproject/nubis-sso/pull/124) ([gozer](https://github.com/gozer))
+- Initial implementation of role-based access control [\#122](https://github.com/nubisproject/nubis-sso/pull/122) ([gozer](https://github.com/gozer))
+- Cleanup old group claims [\#120](https://github.com/nubisproject/nubis-sso/pull/120) ([gozer](https://github.com/gozer))
+- Upgrade Traefik to 1.5.4 [\#118](https://github.com/nubisproject/nubis-sso/pull/118) ([gozer](https://github.com/gozer))
+
 ## [v2.2.0](https://github.com/nubisproject/nubis-sso/tree/v2.2.0) (2018-04-06)
 [Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.1.0...v2.2.0)
 
@@ -8,9 +26,12 @@
 - \[TF\] Cleanup for 0.11.x [\#112](https://github.com/nubisproject/nubis-sso/issues/112)
 - Tag project as a platform project [\#108](https://github.com/nubisproject/nubis-sso/issues/108)
 - \[auth0\] Move auth0 to oidc-conformant mode [\#83](https://github.com/nubisproject/nubis-sso/issues/83)
+- Tag v2.2.0 release [\#114](https://github.com/nubisproject/nubis-sso/issues/114)
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.2.0 release \[skip ci\] [\#116](https://github.com/nubisproject/nubis-sso/pull/116) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.2.0 release \[skip ci\] [\#115](https://github.com/nubisproject/nubis-sso/pull/115) ([nubis-automation](https://github.com/nubis-automation))
 - Fix \#112 [\#113](https://github.com/nubisproject/nubis-sso/pull/113) ([gozer](https://github.com/gozer))
 - Tagging project as a platform component [\#111](https://github.com/nubisproject/nubis-sso/pull/111) ([limed](https://github.com/limed))
 - Lint fix [\#110](https://github.com/nubisproject/nubis-sso/pull/110) ([limed](https://github.com/limed))
