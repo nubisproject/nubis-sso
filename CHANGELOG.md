@@ -1,6 +1,6 @@
 # Change Log
 
-## [v2.3.0](https://github.com/nubisproject/nubis-sso/tree/v2.3.0) (2018-07-17)
+## [v2.3.0](https://github.com/nubisproject/nubis-sso/tree/v2.3.0) (2018-07-20)
 [Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.2.0...v2.3.0)
 
 **Closed issues:**
@@ -11,10 +11,13 @@
 - Upgrade Traefik to 1.5.4 [\#117](https://github.com/nubisproject/nubis-sso/issues/117)
 - Tag v2.2.0 release [\#114](https://github.com/nubisproject/nubis-sso/issues/114)
 - Lint project [\#109](https://github.com/nubisproject/nubis-sso/issues/109)
+- Tag v2.3.0 release [\#128](https://github.com/nubisproject/nubis-sso/issues/128)
 - Tag v2.3.0 release [\#125](https://github.com/nubisproject/nubis-sso/issues/125)
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#130](https://github.com/nubisproject/nubis-sso/pull/130) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#129](https://github.com/nubisproject/nubis-sso/pull/129) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#127](https://github.com/nubisproject/nubis-sso/pull/127) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#126](https://github.com/nubisproject/nubis-sso/pull/126) ([nubis-automation](https://github.com/nubis-automation))
 - Add \[Kubernetes\] tab if service is available [\#124](https://github.com/nubisproject/nubis-sso/pull/124) ([gozer](https://github.com/gozer))
