@@ -1,6 +1,6 @@
 # Change Log
 
-## [v2.3.0](https://github.com/nubisproject/nubis-sso/tree/v2.3.0) (2018-07-24)
+## [v2.3.0](https://github.com/nubisproject/nubis-sso/tree/v2.3.0) (2018-07-27)
 [Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.2.0...v2.3.0)
 
 **Closed issues:**
@@ -11,6 +11,7 @@
 - Upgrade Traefik to 1.5.4 [\#117](https://github.com/nubisproject/nubis-sso/issues/117)
 - Tag v2.2.0 release [\#114](https://github.com/nubisproject/nubis-sso/issues/114)
 - Lint project [\#109](https://github.com/nubisproject/nubis-sso/issues/109)
+- Tag v2.3.0 release [\#137](https://github.com/nubisproject/nubis-sso/issues/137)
 - Tag v2.3.0 release [\#134](https://github.com/nubisproject/nubis-sso/issues/134)
 - Tag v2.3.0 release [\#131](https://github.com/nubisproject/nubis-sso/issues/131)
 - Tag v2.3.0 release [\#128](https://github.com/nubisproject/nubis-sso/issues/128)
@@ -18,6 +19,8 @@
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#139](https://github.com/nubisproject/nubis-sso/pull/139) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#138](https://github.com/nubisproject/nubis-sso/pull/138) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#136](https://github.com/nubisproject/nubis-sso/pull/136) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#135](https://github.com/nubisproject/nubis-sso/pull/135) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#133](https://github.com/nubisproject/nubis-sso/pull/133) ([nubis-automation](https://github.com/nubis-automation))
