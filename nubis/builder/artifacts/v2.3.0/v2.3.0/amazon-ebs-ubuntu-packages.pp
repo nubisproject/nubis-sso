@@ -83,10 +83,10 @@ package { 'boto':
   ensure => '2.48.0',
 }
 package { 'boto3':
-  ensure => '1.7.67',
+  ensure => '1.7.71',
 }
 package { 'botocore':
-  ensure => '1.10.67',
+  ensure => '1.10.71',
 }
 package { 'bsd-mailx':
   ensure => '8.1.2-0.20160123cvs-2',
@@ -368,10 +368,10 @@ package { 'git-man':
   ensure => '1:2.7.4-0ubuntu1.4',
 }
 package { 'gnupg':
-  ensure => '1.4.20-1ubuntu3.2',
+  ensure => '1.4.20-1ubuntu3.3',
 }
 package { 'gpgv':
-  ensure => '1.4.20-1ubuntu3.2',
+  ensure => '1.4.20-1ubuntu3.3',
 }
 package { 'grep':
   ensure => '2.25-1~16.04.1',
@@ -752,10 +752,10 @@ package { 'libgirepository-1.0-1':
   ensure => '1.46.0-3ubuntu1',
 }
 package { 'libglib2.0-0':
-  ensure => '2.48.2-0ubuntu3',
+  ensure => '2.48.2-0ubuntu4',
 }
 package { 'libglib2.0-data':
-  ensure => '2.48.2-0ubuntu3',
+  ensure => '2.48.2-0ubuntu4',
 }
 package { 'libgmp-dev':
   ensure => '2:6.1.0+dfsg-2',
@@ -851,7 +851,7 @@ package { 'libitm1':
   ensure => '5.4.0-6ubuntu1~16.04.10',
 }
 package { 'libjansson4':
-  ensure => '2.7-3',
+  ensure => '2.7-3ubuntu0.1',
 }
 package { 'libjbig0':
   ensure => '2.1-3.1',
@@ -956,7 +956,7 @@ package { 'libmpx0':
   ensure => '5.4.0-6ubuntu1~16.04.10',
 }
 package { 'libmspack0':
-  ensure => '0.5-1ubuntu0.16.04.1',
+  ensure => '0.5-1ubuntu0.16.04.2',
 }
 package { 'libncurses5':
   ensure => '6.0+20160213-1ubuntu1',
@@ -1730,22 +1730,22 @@ package { 'resolvconf':
   ensure => '1.78ubuntu6',
 }
 package { 'rspec':
-  ensure => ['3.7.0'],
+  ensure => ['3.8.0'],
 }
 package { 'rspec-core':
-  ensure => ['3.7.1'],
+  ensure => ['3.8.0'],
 }
 package { 'rspec-expectations':
-  ensure => ['3.7.0'],
+  ensure => ['3.8.1'],
 }
 package { 'rspec-its':
   ensure => ['1.2.0'],
 }
 package { 'rspec-mocks':
-  ensure => ['3.7.0'],
+  ensure => ['3.8.0'],
 }
 package { 'rspec-support':
-  ensure => ['3.7.1'],
+  ensure => ['3.8.0'],
 }
 package { 'rsync':
   ensure => '3.1.1-3ubuntu1.2',
@@ -1826,7 +1826,7 @@ package { 'sosreport':
   ensure => '3.5-1~ubuntu16.04.3',
 }
 package { 'specinfra':
-  ensure => ['2.75.0'],
+  ensure => ['2.75.1'],
 }
 package { 'squashfs-tools':
   ensure => '1:4.3-3ubuntu2.16.04.2',
