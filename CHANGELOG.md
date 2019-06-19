@@ -1,21 +1,23 @@
 # Change Log
 
+## [v2.4.2](https://github.com/nubisproject/nubis-sso/tree/v2.4.2) (2019-06-19)
+[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.4.0...v2.4.2)
+
+**Closed issues:**
+
+- Tag v2.4.0 release [\#156](https://github.com/nubisproject/nubis-sso/issues/156)
+
 ## [v2.4.0](https://github.com/nubisproject/nubis-sso/tree/v2.4.0) (2019-03-06)
-[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.4.0...v2.4.0)
+[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.3.1...v2.4.0)
 
 **Closed issues:**
 
 - Tag v2.4.0 release [\#153](https://github.com/nubisproject/nubis-sso/issues/153)
 
-## [v2.4.0](https://github.com/nubisproject/nubis-sso/tree/v2.4.0) (2019-02-23)
-[Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.3.1...v2.4.0)
-
-**Closed issues:**
-
-- Tag v2.3.1 release [\#149](https://github.com/nubisproject/nubis-sso/issues/149)
-
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.4.0 release \[skip ci\] [\#158](https://github.com/nubisproject/nubis-sso/pull/158) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.4.0 release \[skip ci\] [\#157](https://github.com/nubisproject/nubis-sso/pull/157) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.4.0 release \[skip ci\] [\#155](https://github.com/nubisproject/nubis-sso/pull/155) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.4.0 release \[skip ci\] [\#154](https://github.com/nubisproject/nubis-sso/pull/154) ([nubis-automation](https://github.com/nubis-automation))
 
@@ -24,15 +26,17 @@
 
 **Closed issues:**
 
-- Tag v2.3.0 release [\#143](https://github.com/nubisproject/nubis-sso/issues/143)
+- Tag v2.3.1 release [\#149](https://github.com/nubisproject/nubis-sso/issues/149)
 - Tag v2.3.1 release [\#146](https://github.com/nubisproject/nubis-sso/issues/146)
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.3.1 release \[skip ci\] [\#151](https://github.com/nubisproject/nubis-sso/pull/151) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.3.1 release \[skip ci\] [\#150](https://github.com/nubisproject/nubis-sso/pull/150) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.1 release \[skip ci\] [\#148](https://github.com/nubisproject/nubis-sso/pull/148) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.1 release \[skip ci\] [\#147](https://github.com/nubisproject/nubis-sso/pull/147) ([nubis-automation](https://github.com/nubis-automation))
 
-## [v2.3.0](https://github.com/nubisproject/nubis-sso/tree/v2.3.0) (2018-08-01)
+## [v2.3.0](https://github.com/nubisproject/nubis-sso/tree/v2.3.0) (2018-08-07)
 [Full Changelog](https://github.com/nubisproject/nubis-sso/compare/v2.2.0...v2.3.0)
 
 **Closed issues:**
@@ -41,8 +45,8 @@
 - RBAC: Fine-grained access controls [\#121](https://github.com/nubisproject/nubis-sso/issues/121)
 - Cleanup old openid group logic [\#119](https://github.com/nubisproject/nubis-sso/issues/119)
 - Upgrade Traefik to 1.5.4 [\#117](https://github.com/nubisproject/nubis-sso/issues/117)
-- Tag v2.2.0 release [\#114](https://github.com/nubisproject/nubis-sso/issues/114)
 - Lint project [\#109](https://github.com/nubisproject/nubis-sso/issues/109)
+- Tag v2.3.0 release [\#143](https://github.com/nubisproject/nubis-sso/issues/143)
 - Tag v2.3.0 release [\#140](https://github.com/nubisproject/nubis-sso/issues/140)
 - Tag v2.3.0 release [\#137](https://github.com/nubisproject/nubis-sso/issues/137)
 - Tag v2.3.0 release [\#134](https://github.com/nubisproject/nubis-sso/issues/134)
@@ -52,6 +56,8 @@
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#145](https://github.com/nubisproject/nubis-sso/pull/145) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#144](https://github.com/nubisproject/nubis-sso/pull/144) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#142](https://github.com/nubisproject/nubis-sso/pull/142) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#141](https://github.com/nubisproject/nubis-sso/pull/141) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#139](https://github.com/nubisproject/nubis-sso/pull/139) ([nubis-automation](https://github.com/nubis-automation))
@@ -263,6 +269,7 @@
 - Merge v1.5.0 release into develop. \[skip ci\] [\#5](https://github.com/nubisproject/nubis-sso/pull/5) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v1.5.0 release \[skip ci\] [\#4](https://github.com/nubisproject/nubis-sso/pull/4) ([tinnightcap](https://github.com/tinnightcap))
 - Fix ACL access [\#2](https://github.com/nubisproject/nubis-sso/pull/2) ([gozer](https://github.com/gozer))
+
 
 
 \* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
